@@ -22,16 +22,41 @@ header {
     position: fixed;
     top: 0;
     z-index: 5;
-  }
+}
+
+#tdiv {
+    margin: 0;
+    font-size: 2rem;
+    width: 100%;
+    height: 20rem;
+    background: linear-gradient(#002374,#120b1d);
+}
+
+.title-container {
+    justify-content: center;
+    padding-top: 8rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.title1 {
+    cursor: default;
+    color: aliceblue;
+    font-family: 'Marck Script';
+    transform:rotate(140deg) translateX(-100%) translateY(10%) scale(.01);
+    transition-duration: 2000ms; 
+}
 
 .title {
-    margin: 0;
-    padding: 50px 20px;
+    font-family: 'Marck Script';
+    padding-right: 1rem;
     text-align: center;
-    background: linear-gradient(#002374,#120b1d);
     color: aliceblue;
     cursor: default;
+    transform:rotate(-100deg) translateX(-100%) translateY(100%) scale(.01);
+    transition-duration: 3000ms; 
 }
+
 .main-nav {
     height: 100%;
     width: 99%;
@@ -335,7 +360,7 @@ header {
 
 .htitle1 {
     transition-delay: 200ms;
-    transform: translateX(80%);
+    transform: translateX(50%);
 }
 
 .htitle2 {
@@ -400,6 +425,13 @@ header {
     }
     .main-nav li a {
         font-size: 1rem;
+    }
+    .title-container {
+        font-size: 1rem;
+        flex-direction: column;
+        padding-top: 3rem;
+        text-align: center;
+
     }
     .project-container {
         flex-direction: column;
@@ -485,6 +517,11 @@ header {
 }
 /* Screen size minimum 900px */
 @media(min-width: 900px) {
+    .title-container {
+        font-size: 2rem;
+        flex-direction: row;
+        padding-top: 8rem;
+    }
     .background-box {
         display: inline;
     }
