@@ -31,6 +31,7 @@ header {
     text-align: center;
     background: linear-gradient(#002374,#120b1d);
     color: aliceblue;
+    cursor: default;
 }
 .main-nav {
     height: 100%;
@@ -113,6 +114,7 @@ header {
 .text {
     margin: 0 7rem;
     text-align: center;
+    cursor: default;
 }
 
 .box {
@@ -148,11 +150,6 @@ header {
     border-bottom: 1px solid #fff;
 }
 
-
-.about-desc {
-    padding-left: 3rem;
-}
-
 /* Contact Section */
 
 .contact-container {
@@ -179,7 +176,6 @@ header {
 }
 
 #contact-button {
-    margin-left: 20px;
     color: #fff;
     font-size: large;
     padding: 2rem;
@@ -201,16 +197,16 @@ header {
     margin: auto;
     list-style: none;
     display: none;
+    padding-left: 0;
+    cursor: default;
 }
 
 #contact-list li {
     text-align: center;
-    font-size: 2rem;
     color: #fff;
 }
 
 #contact-list li a {
-    font-size: 2rem;
     text-decoration: none;
     color: #fff;
 }
@@ -283,6 +279,24 @@ header {
     opacity: 1;
 }
 
+/* Scrollbar */
+
+::-webkit-scrollbar {
+    width: .7rem;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(193, 198, 215, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+  
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
 /* Hidden Section, deals with animations */
 
 .hidden {
@@ -296,7 +310,7 @@ header {
 }
 
 .hidden2 {
-    transform: rotate(90deg) translateX(100%);
+    transform: rotate(-20deg) translateX(-200%);
 }
 
 .hidden3 {
@@ -400,7 +414,6 @@ header {
     }
     .hdesc {
         width: inherit;
-        
     }
     .text {
         width: inherit;
@@ -415,6 +428,7 @@ header {
         background-color: rgba(217, 220, 231, 0.7);
         border-radius: 7px;
         width: 100%;
+        cursor: default;
     }
     .about-desc {
         padding-left: .7rem;
@@ -425,9 +439,6 @@ header {
     }
     #contact-button {
         margin-left: 0;
-        padding-left: 0;
-    }
-    #contact-list {
         padding-left: 0;
     }
     #contact-list li {
