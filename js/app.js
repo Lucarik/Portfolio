@@ -21,15 +21,32 @@ contactButton.onclick = function() {
 }
 
 // Script for sticky header
-window.onscroll = function() {myFunction()};
+window.onscroll = function() {stickyHeader()};
         
 var header = document.getElementById("header-nav");
 var sticky = header.offsetTop;
 
-function myFunction() {
+function stickyHeader() {
     if (window.pageYOffset > sticky) {
     header.classList.add("sticky");
     } else {
     header.classList.remove("sticky");
     }
+}
+
+// Script for copy to clipboard
+const copyBtns = document.getElementsByClassName("link-btn");
+for (const btn of copyBtns) { 
+    btn.onclick = function() {copyToClipboard(btn)};
+    btn.onmouseout = function() {resetToolTip(btn)};
+};
+function copyToClipboard(btn) {
+    var pNode = btn.parentNode;
+    var tooltip = pNode.firstChild;
+    tooltip.innerHTML = "Copied: " + btn.innerText;
+}
+function resetToolTip(btn) {
+    var pNode = btn.parentNode;
+    var tooltip = pNode.firstChild;
+    tooltip.innerHTML = "Copy to clipboard";
 }
