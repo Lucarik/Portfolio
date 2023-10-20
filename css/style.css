@@ -233,6 +233,10 @@ header {
     transition-delay: 400ms;
 }
 
+.contact-li:nth-child(4) {
+    transition-delay: 550ms;
+}
+
 .link-btn {
     font-size: inherit;
     background: none;
@@ -331,7 +335,7 @@ header {
 
 .htitle1 {
     transition-delay: 200ms;
-    transform: translateX(100%);
+    transform: translateX(80%);
 }
 
 .htitle2 {
