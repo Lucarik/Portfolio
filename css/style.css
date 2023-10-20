@@ -12,7 +12,7 @@ body {
     flex-direction: column;
     width: 100%;
 }
-
+/* Navigation header */
 header {
     width: 100%;
     background: linear-gradient(#120b1d,#3c5390);
@@ -52,7 +52,6 @@ header {
 .main-nav li a {
     display: block;
     width: inherit;
-    font-size: 2rem;
     text-decoration: none;
     color: #fff;
     height: 100%;
@@ -69,6 +68,8 @@ header {
     color: #d0ddec;
 }
 
+/* Animated box */
+
 .background-box {
     position: absolute;
     width: 300px;
@@ -76,6 +77,8 @@ header {
     background:  rgba(255, 255, 255, 0.1);
     z-index: -1;
 }
+
+/* Project Section */
 
 .body {
     padding-top: 40rem;
@@ -119,6 +122,8 @@ header {
     width: 30em;
 }
 
+/* About Section */
+
 #about {
     background: linear-gradient(#2c416a,#322fe6);
     justify-items: center;
@@ -130,25 +135,12 @@ header {
     z-index: 0;
 }
 
-.about-outline {
-    max-width: 50%;
-    margin: auto;
-    
-}
-
 .about-outline:after {
     content: '';
     display: block;
     border-bottom: 2px solid #fff;
     width: 50%;
     margin-left: auto;
-}
-
-.about-container {
-    margin: 0 2rem 2rem 0;
-    min-height: 30rem;
-    background-color: rgba(217, 220, 231, 0.7);
-    border-radius: 7px;
 }
 
 .about-title {
@@ -160,6 +152,8 @@ header {
 .about-desc {
     padding-left: 3rem;
 }
+
+/* Contact Section */
 
 .contact-container {
     margin: auto;
@@ -289,6 +283,8 @@ header {
     opacity: 1;
 }
 
+/* Hidden Section, deals with animations */
+
 .hidden {
     opacity: 0;
     filter: blur(4px);
@@ -308,7 +304,6 @@ header {
 }
 
 .hidden4 {
-    transform: translateX(150%);
     filter: blur(1px);
     opacity: .2;
     transition-duration: 3000ms;
@@ -363,6 +358,8 @@ header {
     transform: scale(.01);
 }
 
+/* Screen size compatibility section */
+
 @media(prefers-reduced-motion) {
     .hidden {
         transition: none;
@@ -372,6 +369,7 @@ header {
     }
 }
 
+/* Screen size minimum 200px */
 @media(min-width: 200px) {
     .background-box {
         display: none;
@@ -407,13 +405,15 @@ header {
     .text {
         width: inherit;
     }
-    .hidden4 {
-        transform: none;
-    }
     .about-outline {
         max-width: 90%;
+        margin: auto;
     }
     .about-container {
+        margin: 0 2rem 2rem 0;
+        min-height: 30rem;
+        background-color: rgba(217, 220, 231, 0.7);
+        border-radius: 7px;
         width: 100%;
     }
     .about-desc {
@@ -439,6 +439,7 @@ header {
         margin-left: 0;
     }
 }
+/* Screen size minimum 600px */
 @media(min-width: 600px) {
     .main-nav li a {
         font-size: 1.5rem;
@@ -461,6 +462,7 @@ header {
         font-size: 1.5rem;
     }
 }
+/* Screen size minimum 900px */
 @media(min-width: 900px) {
     .background-box {
         display: inline;
