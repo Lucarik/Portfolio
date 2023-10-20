@@ -534,3 +534,15 @@ header {
         font-size: 2rem;
     }
 }
+
+@media(min-width: 1300px) {
+    .main-nav li a {
+        font-size: 3rem;
+    }
+    #to-project {
+        padding-top: 25rem;
+    }
+    .text {
+        max-width: 75%;
+    }
+}
