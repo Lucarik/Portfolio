@@ -41,9 +41,9 @@ header {
 }
 
 .main-nav li {
-    /*background-color: #2c656a;*/
     width: 100%;
     text-align: center;
+    z-index: 1;
 }
 
 .main-nav li a {
@@ -55,6 +55,7 @@ header {
     height: 100%;
     padding: .5rem 0;
     border-radius: 5px 0 5px 0;
+    
 }
 
 .main-nav li a:hover {
@@ -65,15 +66,31 @@ header {
     color: #d0ddec;
 }
 
+.background-box {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background:  rgba(255, 255, 255, 0.1);
+    z-index: -1;
+}
+
 .body {
     padding-top: 40rem;
+    width: inherit;
+    min-height: 100vh;
 }
 
 #project {
     background: linear-gradient(#3c5390,#2c416a);
+    z-index: 0;
 }
 
 .project1 {
+    padding: 0px 30px 0px 30px;
+    border-radius: 10px;
+}
+
+.project2 {
     padding: 0px 30px 0px 30px;
     border-radius: 10px;
 }
@@ -103,14 +120,12 @@ header {
 #about {
     background: linear-gradient(#2c416a,#322fe6);
     justify-items: center;
+    z-index: 0;
 }
 
 #contact {
     background: linear-gradient(#322fe6,#272c60);
-}
-
-.body {
-min-height: 100vh;
+    z-index: 0;
 }
 
 .about-outline {
@@ -313,6 +328,28 @@ min-height: 100vh;
     transform: translateY(100%);
 }
 
+.hidden-box {
+    transition-duration: 20000ms;
+}
+
+.hbox1 {
+    transform: rotate(50deg) translateX(-100%) translateY(-300%);
+}
+
+.hbox2 {
+    transform: rotate(-100deg) translateX(200%) translateY(-300%);
+}
+
+.hbox3 {
+    left:50%;
+    transform: rotate(-200deg) translateX(-110%) translateY(250%);
+}
+
+.hbox4 {
+    left:50%;
+    transform: rotate(-250deg) translateX(-110%) translateY(250%);
+}
+
 .show {
     opacity: 1;
     filter: blur(0);
@@ -320,8 +357,22 @@ min-height: 100vh;
     transform: rotate(0);
 }
 
-/*@media(prefers-reduced-motion) {
+.show-box {
+    transform: translate(0) rotate(0);
+    transform: scale(.01);
+}
+
+@media(prefers-reduced-motion) {
     .hidden {
         transition: none;
     }
-}*/
+    .background-box {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .main-nav li a {
+        font-size: 1px;
+    }
+}

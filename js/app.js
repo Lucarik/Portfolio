@@ -13,6 +13,17 @@ const observer = new IntersectionObserver((entries) => {
 const hiddenEl = document.querySelectorAll('.hidden');
 hiddenEl.forEach((el) => observer.observe(el));
 
+// Animation specifically for background boxes
+const observer1 = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show-box');
+        };
+    });
+});
+const hiddenBoxes = document.querySelectorAll('.hidden-box');
+hiddenBoxes.forEach((el) => observer1.observe(el));
+
 // Shows contact links after contact button is clicked
 var contactButton = document.getElementById("contact-button");
 contactButton.onclick = function() {
