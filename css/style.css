@@ -43,7 +43,7 @@ header {
     cursor: default;
     color: aliceblue;
     font-family: 'Marck Script';
-    transform:rotate(140deg) translateX(-100%) translateY(10%) scale(.01);
+    transform:rotate(40deg) translateX(-100%) translateY(10%) scale(.01);
     transition-duration: 2000ms; 
 }
 
@@ -420,6 +420,9 @@ header {
 
 /* Screen size minimum 200px */
 @media(min-width: 200px) {
+    .title, .title1 {
+        transform: none;
+    }
     .background-box {
         display: none;
     }
