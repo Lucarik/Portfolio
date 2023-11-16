@@ -14,3 +14,27 @@ body {
     align-items: center;
     margin: 5vh 0;
 }
+
+#description {
+    color: rgb(133, 133, 133)
+}
+
+h2 {
+    color:rgb(224, 236, 247, 0.9)
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 300;
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+a:hover {
+    color: rgba(184, 219, 255, 0.9);
+}
