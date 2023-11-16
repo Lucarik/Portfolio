@@ -154,6 +154,24 @@ header {
     width: 30em;
 }
 
+.link {
+    display: block;
+    width: fit-content;
+    text-decoration: none;
+    background-color: rgba(217, 220, 231, 0.4);
+    color: #fff;
+    border-radius: 5px;
+    font-weight: 700;
+    padding: 5px;
+    text-align: center;
+    margin: auto;
+}
+
+.link:hover {
+    background-color: rgba(217, 220, 231, 0.7);
+    transition-duration: 1s;
+}
+
 /* About Section */
 
 #about {
