@@ -1,6 +1,7 @@
 html {
     max-width: 100%;
     overflow-x: hidden;
+    scroll-behavior:smooth
 }
 body {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
