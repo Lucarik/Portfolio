@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Survey Form</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1 id="title">User Satisfaction Survey</h1>
+    <p id="description">Let us know your satisfaction with our survey</p>
+    <form id="survey-form">
+      <fieldset>
+        <label id="name-label" for="name">Name: <input id="name" type="text" name="name" placeholder="Enter your name" required /></label>
+         <label id="email-label" for="email">Email: <input id="email" type="email" name="email" placeholder="Enter your email" required /></label>
+          <label id="number-label" for="number">Age: <input id="number" type="number" name="number" min="10" max="120" placeholder="Enter your age" required /></label>
+      
+      
+        <label for="dropdown">Select a role
+          <select id="dropdown">
+            <option value="">Select role</option>
+            <option value="1">Personal</option>
+            <option value="2">Business</option>
+          </select>
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>Are you satisfied with this survey?</legend>
+        <label  for="satisfied"> 
+          <input class="inline" id="satisfaction" type="radio" name="satisfaction" value="Yes" checked /> Yes
+        </label>
+        <label  for="notsatisfied">
+          <input class="inline" id="notsatisfied" type="radio" name="satisfaction" value="No" /> No
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>How satisfied?</legend>
+        <label for="ch1"><input id="ch1" type="checkbox" class="inline" value="0" />Not that satisfied
+      </label>
+      <label for="ch2"><input id="ch2" type="checkbox" class="inline" value="1" />Neutral
+      </label>
+      <label for="ch3"><input id="ch3" type="checkbox" class="inline" value="2" />Somewhat satisfied
+      </label>
+      <label for="ch4"><input id="ch4" type="checkbox" class="inline" value="3" />Very satisfied
+      </label>
+      </fieldset
+      <fieldset>
+        <label for="comments">Any additional comments?
+          <textarea id="comments" name="comments" rows="3" cols="30" placeholder="Comments here..." >
+          </textarea>
+        </label>
+      </fieldset>
+      <input type="submit" id="submit" value="Submit" name="submit" />
+    </form>
+  </body>
+</html>
