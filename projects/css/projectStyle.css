@@ -3,6 +3,7 @@ body {
     color: white;
     box-sizing: border-box;
     margin: 0;
+    cursor: default;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -15,12 +16,26 @@ body {
     margin: 5vh 0;
 }
 
+#return {
+    margin: 0;
+    margin-right: auto;
+    justify-content: left;
+    padding-left: 1rem;
+    font-weight: 500;
+}
+
 #description {
-    color: rgb(133, 133, 133)
+    color: rgb(133, 133, 133);
 }
 
 h2 {
-    color:rgb(224, 236, 247, 0.9)
+    color:rgb(224, 236, 247, 0.9);
+}
+
+span {
+    display: block;
+    width: 90%;
+    border: 1px solid #444;
 }
 
 li {
@@ -31,10 +46,10 @@ a {
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 300;
     text-decoration: none;
-    color: #fff;
+    color: #eee;
     cursor: pointer;
 }
 
 a:hover {
-    color: rgba(184, 219, 255, 0.9);
+    color: rgba(149, 192, 236, 0.9);
 }
