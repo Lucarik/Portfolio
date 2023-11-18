@@ -1,0 +1,756 @@
+﻿html, body {
+    height: 100%;
+}
+
+body {
+    font: 1em arial;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(249, 252, 255);
+}
+
+label, input {
+    display: block;
+}
+
+.register-form span input, .form-button {
+    padding: 5px 5px;
+    border: 1px solid grey;
+    box-shadow: 1px 1px 1px black inset;
+}
+
+.form-input {
+    padding: 5px 5px;
+    margin: 3px 5px;
+    border-radius: 2px;
+}
+
+.form-button {
+    font-weight: bold;
+    margin: auto;
+    padding: 5px 5px;
+    width: 10rem;
+    border-radius: 2px;
+}
+
+    .form-button:hover {
+        background-color: lightsteelblue;
+    }
+
+.blue-link {
+    font-weight: bold;
+    color: #00bcd4;
+    text-decoration: none;
+    text-align: center;
+    font-size: 13px;
+    width: 7rem;
+    padding: .5rem;
+    margin: auto;
+}
+
+    a:hover {
+        color: #808080;
+    }
+    
+/* Profile page content */
+.profile-body {
+    background-color: rgb(249, 252, 255);
+    padding-top: 20px;
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid lightgray;
+    border-bottom: none;
+    border-right: none;
+}
+
+.pTitle {
+    margin:auto;
+}
+
+.p_image {
+    max-height: 70%;
+    max-width: 50%;
+}
+
+.profile-left, .group-left {
+    padding-right: 20px;
+    border-right: 1px solid #aaa;
+}
+
+.profile-left,
+.profile-right {
+  width: 50%;
+  display: inline-block;
+}
+
+/* Message form */
+.message-block, .group-block {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 2;
+}
+
+.message-body , .group-invite-body{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 200px;
+    width: 60%;
+    /*border: 1px solid black;*/
+    background: snow;
+}
+
+.pMessage {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+/* Group page content */
+
+.group-left {
+    width: 70%;
+    display: inline-block;
+}
+
+.group-right {
+    width: 30%;
+    height: 100%;
+    display: inline-block;
+}
+
+.group-left-message-container, .profile-right-message-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 90%;
+    overflow-y: scroll;
+    background-color: #e7e6e6;
+    /*border: 1px solid black;*/
+}
+
+.group-left-container {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    height: 100%;
+    margin: auto;
+}
+
+/* Group message layout */
+.group-post {
+    display: flex;
+    flex-direction: row;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    max-height: 50px;
+    width: 100%;
+    margin: 0;
+    padding: 10px 10px 20px 10px;
+}
+
+.wordwrap {  
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+ }
+
+.group-chat-picture {
+    margin: 5px;
+    height: 50px;
+    width: 50px;
+    justify-self: center;
+}
+
+.group-text-content {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    /*border: 1px solid white;*/
+    margin-right: 20px;
+    padding: 0;
+}
+
+.group-chat-username {
+    font-weight: bold;
+    padding: 0;
+    margin-top: 3px;
+    margin-bottom: 0;
+}
+
+.chat-content {
+    padding: 0;
+    margin-top: 0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Timestamp in message */
+.group-timestamp {
+    width: 130px;
+    padding: 0;
+    margin-right: 0;
+    margin-top: 0;
+    /*border: 1px solid white;*/
+}
+
+.timestamp {
+    color: rgb(230, 230, 230);
+    margin-right: 0;
+    margin-top: 0;
+    padding: 0;
+}
+
+/* Chat text and button input */
+.group-input {
+    border-radius: 3px;
+    height: 25px;
+    width: 90%;
+    height: 25px;
+    max-height: 40px;
+}
+
+.chat-button {
+    width: 10%;
+    border-radius: 2px;
+    background-color:rgb(132, 203, 212);
+}
+
+#leavegrB {
+    background: lightcoral; 
+}
+
+#leavegrB:hover {
+    background-color:red;
+
+}
+
+.chat-button:hover {
+    background-color:rgb(149, 157, 158);
+}
+
+.group-right-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Group scrollbar styles */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 5px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: black; 
+    border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: darkslategrey; 
+  }
+
+.group-profilepic {
+    border: 3px solid darkslategrey;
+    border-radius: 5px;
+    width: 90%;
+    height: 200px;
+    margin: auto;
+}
+
+.message-form {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+}
+
+.message-input {
+    padding-right: 0;
+    margin-right: 0;
+    max-lines: 3;
+}
+
+.profileB {
+    margin-left: 90px;
+    padding: 10px;
+    width: 300px;
+}
+
+/* Register form body content */
+.content {
+    box-sizing: border-box;
+    width: 50%;
+    margin: auto;
+    padding: 100px 0;
+}
+/* Friends page */
+.top-bar {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgb(245, 245, 245);
+    width: fit-content;
+    margin: auto;
+    justify-content: space-evenly;
+    border-radius: 5px;
+}
+
+.top-bar li {
+    display: block;
+    margin: 2px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-bottom: 3px solid transparent;
+}
+
+.top-bar li:hover {
+    border-color: #444;
+}
+
+.No-border {
+    display: block;
+    font-size: 1.3rem;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 5px;
+    font-weight: bold;
+    color: rgb(62, 171, 190);
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.list-content {
+    display: flex;
+    margin: 20px;
+    padding: 20px;
+    /*border: 1px solid black;*/
+}
+
+.sqlList {
+    visibility: visible;
+}
+
+.requests {
+    display: none;
+}
+
+/* Groups page */
+.newgr {
+    display: none;
+}
+
+.text-input {
+    width: 300px;
+    height: 25px;
+    max-height: 30px;
+    font-size: 15px;
+    
+    margin: auto;
+}
+
+.group-request {
+    display: flex;
+    width: 700px;
+    border: 3px solid darkslategrey;
+    background-color: #f1f1f1;
+    margin: auto;
+    border-radius: 5px;
+}
+
+.padding {
+    padding: 20px;
+}
+
+.formbtn {
+    padding: 10px;
+    border: 1px solid whitesmoke;
+    border-radius: 2px;
+    font-weight: bold;
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+    background: #5fd0e4;
+    border-width: 3px;
+    margin: auto;
+}
+
+.formbtn:hover {
+    border-color: rgb(36, 36, 36);
+}
+
+.form-profile {
+    /*display: flex;
+    flex-direction: column;*/
+    font-family: sans-serif;
+    text-align: center;
+    max-width: 200px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    max-height: 200px;
+    margin: 10px;
+}
+
+.form-profile-group {
+    /*display: flex;
+    flex-direction: column;*/
+    font-family: sans-serif;
+    text-align: center;
+    max-width: 350px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    max-height: 200px;
+    margin: 10px;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 2px;
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+.group-image {
+    width: 300px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 2px;
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+.profile-username {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+
+#profile-username {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 5px;
+    margin: 0;
+}
+.container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr auto;/*repeat(3, 100px);*/
+    grid-gap: 0;
+}
+.item {
+    display: flex;
+}
+.item1 {
+    grid-row: 2/3;
+    grid-column: 1/3;
+    color: transparent;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    z-index: 5;
+}
+
+.item1, .item2, .item3, .item4 {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.item3 {
+    align-self: end;
+    justify-self: center;
+    margin: 1.3rem;
+    background-color: whitesmoke;
+    color: black;
+    border: 2px solid white;
+    border-radius: 7px;
+    opacity: .5;
+}
+
+.item4 {
+    grid-row-end: 2;
+    align-self: end;
+    justify-self: center;
+    margin-top: 1rem;
+}
+
+.profile-name {
+    padding: 0;
+    margin: 0;
+}
+
+/*Pending friends */
+.requests {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.friend-request {
+    display: flex;
+    margin: auto;
+    width: 600px;
+    border: 3px solid darkslategrey;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+.removefr {
+    display: none;
+}
+
+.usern , .nam{
+    align-self: center;
+    padding: 5px;
+}
+
+.fr_btn  {
+    font-size: 1rem;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    font-weight: bold;
+    color: rgb(132, 203, 212);
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: auto;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.left_fr {
+    border-right: 1px solid lightslategrey;
+
+}
+
+.right_fr {
+    margin-left: 10px;
+}
+
+/* Search page */
+.search-body {
+    background-color: rgb(249, 252, 255);
+    padding-top: 20px;
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    border: 1px solid lightgray;
+    border-bottom: none;
+    border-right: none;
+}
+
+.sqlpar {
+    padding: 10px 20px;
+    
+}
+
+.link {
+    font-size: 1rem;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    font-weight: bold;
+    color: rgb(132, 203, 212);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.product::after {
+    content: '';
+    display: block;
+    width: 30%;
+    color: #fff;
+    border-bottom: 1px solid lightgrey;
+}
+
+
+
+/* Background for login and register page */
+.decal {
+    background: linear-gradient(0deg, #fafafa 70%, #c3dcf9 30%);
+    background-repeat: no-repeat; 
+    background-size: cover;
+}
+/* Background words */
+.title {
+    padding: .1rem .5rem 1rem .5rem;
+    color: #c5c5c5;
+    margin: auto;
+}
+
+.floating-title {
+    position: absolute;
+    font-size: 70px;
+    top: 0;
+    left: 50px;
+    opacity: .3;
+    z-index: -1;
+}
+
+.login {
+    margin-top: 10rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.login_form, .register-form {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.register-form {
+    border: 4px solid rgb(234, 255, 254);
+    padding: 0rem 1rem 1rem 0rem;
+    background-color: lightgray;
+    border-radius: 3px;
+}
+
+.r2header {
+    color: #fff;
+    background-color: #000;
+    width: fit-content();
+    padding: 0;
+    margin: 0;
+    border-radius: 0 0 10px 0;
+}
+
+.desc {
+    font-size: 10px;
+    color: #fff;
+    background-color: #00bcd4;
+    margin-bottom: 0;
+    padding: 1rem, 1px 0 1px;
+    margin-left: 0;
+    width: 5rem;
+    text-align: center;
+}
+
+span {
+    padding: 6rem 1rem 3rem 1rem;
+    margin: auto;
+}
+
+.reg {
+    padding-top: 0;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    width: 20rem;
+    border-radius: 0 3px 3px 3px;
+}
+
+.sidebar {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 3; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 40px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+}
+  
+/* The sidebar links */
+.sidebar a {
+    padding: 8px 8px 8px 32px;
+    border-bottom: 1px solid grey;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+.last-menu-item {
+    margin-top: auto;
+}
+
+/* Position and style the close button (top right corner) */
+.closebtn, .openbtn {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    z-index: 5;
+    font-size: 40px;
+    cursor: pointer;
+    background: none;
+    padding: 1px 5px;
+    border: none;
+    outline: none;
+}
+
+.search-form span {
+    display: flex;
+    flex-direction: row;
+}
+
+.search-button {
+    display: block;
+    outline: none;
+    background: none;
+    color: lightgrey;
+    transform:rotate(45deg);
+    font-size: 30px;
+    cursor: pointer;
+    border: none;
+    margin-left: auto;
+}
+
+.search-button:hover {
+    color: white;
+}
+
+#search {
+    max-height: 20px;
+    margin-right: 0;
+    margin-top: 10px;
+}
+
+/* The button used to open the sidebar */
+.openbtn {
+    color: #111;
+}
+
+.closebtn {
+    color: lightgrey;
+}
+
+.openbtn:hover {
+    color: #444;
+}
+
+.closebtn:hover {
+    color: white;
+}
