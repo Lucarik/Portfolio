@@ -10,12 +10,27 @@
         <script defer src="./js/app.js" type="text/javascript"></script>
     </head>
     <body>
-        <div id="tdiv">
-            <div class="title-container">
-                <h1 class="title hidden">Justin Sterling's</h1>
-                <h1 class="title1 hidden">Portfolio</h1>
+        <!-- <div class="pageContainer">
+            <div class="letterContainer" id="j">
+                <h1 class="letter">J</h1>
             </div>
-        </div>
+            <div class="letterContainer" id="u">
+                <h1 class="letter">u</h1>
+            </div>
+            <div class="letterContainer" id="s">
+                <h1 class="letter">s</h1>
+            </div>
+            <div class="letterContainer" id="t">
+                <h1 class="letter">t</h1>
+            </div>
+            <div class="letterContainer" id="i">
+                <h1 class="letter">i</h1>
+            </div>
+            <div class="letterContainer" id="n">
+                <h1 class="letter">n</h1>
+            </div>
+        </div> -->
+        <!--
         <header id="header-nav">
             <ul class="main-nav">
                 <li><a href="#">Top</a></li>
@@ -89,6 +104,56 @@
                 <div class="background-box hidden-box hbox4"></div>
             </div>
 
-        </div>
+        </div>-->
+        <canvas></canvas>
+        <script>
+            dragElement(document.getElementById("j"));
+            dragElement(document.getElementById("u"));
+            dragElement(document.getElementById("s"));
+            dragElement(document.getElementById("t"));
+            dragElement(document.getElementById("i"));
+            dragElement(document.getElementById("n"));
+
+            function dragElement(elmnt) {
+                var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                if (document.getElementById(elmnt.id + "header")) {
+                    // if present, the header is where you move the DIV from:
+                    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+                } else {
+                    // otherwise, move the DIV from anywhere inside the DIV:
+                    elmnt.onmousedown = dragMouseDown;
+                }
+
+                function dragMouseDown(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    // get the mouse cursor position at startup:
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    document.onmouseup = closeDragElement;
+                    // call a function whenever the cursor moves:
+                    document.onmousemove = elementDrag;
+                }
+
+                function elementDrag(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    // calculate the new cursor position:
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    // set the element's new position:
+                    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                }
+
+                function closeDragElement() {
+                    // stop moving when mouse button is released:
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }
+            }
+        </script>
     </body>
 </html>
