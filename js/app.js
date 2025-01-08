@@ -52,14 +52,7 @@ class ParticleEffect {
         this.position = position
         this.colors = colors
         this.velocity = velocity
-        let p = new Particle({
-            position: {
-                x: center.x + 50,
-                y: center.y
-            },
-            color: 'yellow'
-        })
-        this.particles = [p]
+        this.particles = []
     }
 
     update() {
@@ -636,15 +629,15 @@ class Moon { // Inherit from ParticleEffect class
             c.shadowBlur = this.luminescence
             c.shadowColor = this.color
             createCircle(this.position.x+125,this.position.y+125,125,'lightgray',.9)
-            createCircle(this.position.x+125,this.position.y+125,110,'#ff0',.5)
+            createCircle(this.position.x+125,this.position.y+125,110,'#aaa',.5)
             c.globalAlpha = .7
-            c.shadowColor = 'lightgray'
+            c.shadowColor = '#eee'
             c.shadowBlur = 1
-            c.strokeStyle = 'lightgray'
+            c.strokeStyle = '#eee'
             c.font = `bold ${this.fontSize}rem arial`
             c.strokeText(this.text,(this.position.x + this.width/2)-93, (this.position.y+this.height/2)+15)
             if (this.fillText) {
-                c.fillStyle = '#d9d9d9' 
+                c.fillStyle = '#e9e9e9' 
                 c.fillText(this.text,(this.position.x + this.width/2)-93, (this.position.y+this.height/2)+16)
             }
             c.restore()
@@ -696,7 +689,7 @@ function createNameBoxes(name) {
 }
 const coords = [0,-10,-15,-22,-39,-65,-100,-98,-119,-124,-137,-157,-178,-182]
 function setBoxes(boxes) {
-    var i = 0
+    var i = 100
     var j = 0
     console.log(coords[i])
     boxes.forEach(box => {
@@ -739,51 +732,6 @@ position: {
 color: 'blue',
 text: 'u',
 deceleration: .99
-})
-const box3 = new LetterBox({
-    position: {
-        x: center.x - 100,
-        y: center.y - 50
-    },
-    color: 'blue',
-    text: 's',
-    deceleration: .99
-})
-const box4 = new LetterBox({
-    position: {
-        x: center.x + 0,
-        y: center.y - 50
-    },
-    color: 'blue',
-    text: 't',
-    deceleration: .99
-})
-const box5 = new LetterBox({
-    position: {
-        x: center.x + 100,
-        y: center.y - 50
-    },
-    color: 'blue',
-    text: 'i',
-    deceleration: .99
-})
-const box6 = new LetterBox({
-    position: {
-        x: center.x + 200,
-        y: center.y - 50
-    },
-    color: 'blue',
-    text: 'n',
-    deceleration: .99
-})
-const box7 = new LetterBox({
-    position: {
-        x: 0,
-        y: innerHeight
-    },
-    color: 'blue',
-    text: 'a',
-    deceleration: .99
 })
 const rbox = new LetterBox({
     position: {
@@ -907,7 +855,7 @@ const meteor1 = new Meteor({
 
 const particle = new ParticleEffect({
     position: {
-        x: center.x + 50,
+        x: center.x + 150,
         y: center.y - 50
     },
     colors: ['red','yellow','orange'],
@@ -970,7 +918,7 @@ function animate() {
     //particle.draw()
     //meteor1.draw()
     
-    star.draw()
+    //star.draw()
     sm.draw()
     moon.draw()
     bucket.draw()
@@ -981,7 +929,7 @@ function animate() {
     //water.draw()
     //wf.draw()
     
-    box1.text = particle.particles.length
+    //box1.text = particle.particles.length
     collisionMeteor(mm,bxs)
     collisionWater(bucket,bxs)
     // update x position before render
@@ -991,7 +939,7 @@ function animate() {
     //meteor1.update()
     bxs.forEach(box  => box.update())
     mm.update()
-    star.update()
+    //star.update()
     sm.update()
     bucket.update()
     rbox.update()
@@ -1047,13 +995,9 @@ function collisionWater(bucket, boxes) {
             if (
                 hitcollision(w,box,.8)
               ) {
-                //w.done = true
-                //createCircle(box.position.x-20,box.position.y+50)
-                //console.log('hi')
                 w.falling = false
                 w.splash = true
                 box.heldWater += 1
-                //meteorMaker.removeMeteor(i)
             }
             i += 1
         })
