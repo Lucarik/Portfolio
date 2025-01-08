@@ -582,8 +582,8 @@ class Fire {
                 position: {
                     // fire location:
                     // x: position + offset + random
-                    x: this.position.x + 25 + (Math.random()*30)-15,
-                    y: this.position.y + 25 + (Math.random()*30)-15
+                    x: this.position.x + 15 + (Math.random()*30)-15,
+                    y: this.position.y + 15 + (Math.random()*30)-15
                 },
                 color: this.colors[Math.floor(Math.random() * 3)]
             })
