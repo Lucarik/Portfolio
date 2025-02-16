@@ -651,6 +651,43 @@ class Moon { // Inherit from ParticleEffect class
         } else this.luminescence -= val
     }
 }
+class Telescope{ // Inherit from ParticleEffect class
+    constructor({position = { x: 200, y: 500 }}) {
+        this.position = position
+        this.width = 150
+        this.height = 100
+        
+    }
+    draw() {
+        c.save()
+        c.fillStyle = 'gray'
+        //c.strokeStyle = 'white'
+        c.globalAlpha = 1
+        //c.strokeRect(this.position.x, this.position.y, this.width, this.height)
+        var rad = 30 * Math.PI / 180;
+        c.translate(this.position.x + this.width-132, this.position.y-this.height+160)
+        c.rotate(-rad)
+        c.fillRect(5, -10, 30, 30)
+        c.fillStyle = 'black'
+        c.fillRect(35, -15, 10, 40)
+        c.fillStyle = 'gray'
+        c.fillRect(45, -15, 60, 40)
+        c.fillStyle = 'black'
+        c.fillRect(105, -20, 10, 50)
+        c.rotate(rad)
+        c.rotate(rad)
+        c.rotate(rad)
+        c.fillRect(-18, -25, 8, 10)
+        c.fillStyle = 'aliceblue'
+        c.fillRect(-19, -25, 1, 10)
+        c.fillStyle = 'black'
+        c.fillRect(21,-22,40,5)
+        c.rotate(rad)
+        c.rotate(rad/2)
+        c.fillRect(3,-31,40,5)
+        c.restore()
+    }
+}
 // get canvas center
 const center = {
 
@@ -661,6 +698,12 @@ const star = new Star({
     position: {
         x: center.x - 100,
         y: center.y - 50
+    }
+})
+const telescope = new Telescope({
+    position: {
+        x: 200,
+        y: innerHeight - 100
     }
 })
 const sm = new StarMaker()
@@ -691,7 +734,7 @@ const coords = [0,-10,-15,-22,-39,-65,-100,-98,-119,-124,-137,-157,-178,-182]
 function setBoxes(boxes) {
     var i = 100
     var j = 0
-    console.log(coords[i])
+    //console.log(coords[i])
     boxes.forEach(box => {
         if (box.text == box.text.toUpperCase()) i += 70
         box.position = {
@@ -742,6 +785,47 @@ const rbox = new LetterBox({
     height:60,
     text: '↺',
     fontSize: 4
+})
+
+const bArrow = new LetterBox({
+    position: {
+        x: 90,
+        y: innerHeight - 100
+    },
+    width: 60,
+    height:60,
+    text: '⭩ Pick me up',
+    fontSize: 1
+})
+const tArrow = new LetterBox({
+    position: {
+        x: 330,
+        y: innerHeight - 145
+    },
+    width: 60,
+    height:60,
+    text: '⭩ Click to view stars',
+    fontSize: 1
+})
+const t1Arrow = new LetterBox({
+    position: {
+        x: 340,
+        y: innerHeight - 133
+    },
+    width: 60,
+    height:60,
+    text: 'Right click to return',
+    fontSize: .7
+})
+const moveArrow = new LetterBox({
+    position: {
+        x: 90,
+        y: 200
+    },
+    width: 60,
+    height:60,
+    text: 'Can drag\n ⭨',
+    fontSize: 1
 })
 const bucket = new Bucket()
 
@@ -815,8 +899,11 @@ canvas.addEventListener('mousedown', (event) => {
     if (IsThePointerInTheObject(coordinates.x, coordinates.y, moon)) {
         window.location.href = './projects/projectPage.html';
     }
+    if (IsThePointerInTheObject(coordinates.x, coordinates.y, telescope)) {
+        window.location.href = './index1.html';
+    }
 })
-
+var tips = true
 canvas.addEventListener('mousemove', (event) => {
     let coordinates = getClientCoordinates(event);
     
@@ -825,8 +912,10 @@ canvas.addEventListener('mousemove', (event) => {
         //console.log('moving box')
         let activeObject = draggable.find((dr) => dr.active === true);
         if (activeObject) {
+            tips = false
             activeObject.position.x = coordinates.x - offsetX;
             activeObject.position.y = coordinates.y - offsetY;
+            
         }
         drawBoxes();
     }
@@ -905,22 +994,28 @@ const fire = new Fire({
         y: 400
     }
 })
+
 function animate() {
     window.requestAnimationFrame(animate)
   
     // add gray background
     c.fillStyle = 'rgb(39,39,42)'
     c.fillRect(0, 0, canvas.width, canvas.height)
-  
+    telescope.draw()
     // draw boxes
     //box1.draw()
     bxs.forEach(box => box.draw())
     //particle.draw()
     //meteor1.draw()
-    
+    if (tips) {
+        bArrow.draw()
+        moveArrow.draw()
+        tArrow.draw()
+        t1Arrow.draw()
+    }
     //star.draw()
     sm.draw()
-    moon.draw()
+    //moon.draw()
     bucket.draw()
     mm.draw()
     rbox.draw()
@@ -938,12 +1033,12 @@ function animate() {
     //box1.update()
     //meteor1.update()
     bxs.forEach(box  => box.update())
-    mm.update()
+    //mm.update()
     //star.update()
     sm.update()
     bucket.update()
     rbox.update()
-    moon.update()
+    //moon.update()
     //fp.update()
     //fire.update()
     //water.update() 
