@@ -1078,58 +1078,25 @@ class Planet2Env2 {
     })
     //this.flower.growthStage = 3
     //this.flower1.growthStage = 3
-    this.haybale = new HayBale({
-      position: {
-        x: 240,
-        y: 380
-      },
-      size: 20
-    })
-    this.haybale1 = new HayBale({
-      position: {
-        x: 280,
-        y: 380
-      },
-      size: 20
-    })
-    this.haybale2 = new HayBale({
-      position: {
-        x: 310,
-        y: 380
-      },
-      size: 20
-    })
-    this.barn = {
-      position: {
-        x: 340,
-        y: 380
-      },
-      size: 100,
-      color: '#c2a770'
-    }
     
     this.tops = [{
       startX: 0,
       Y: 400,
       object: 'ground'
     }, {
-      startX: 240,
-      Y: 380,
-      object: this.haybale
-    }, {
-      startX: 260,
-      Y: 400,
+      startX: 198,
+      Y: 351,
       object: 'ground'
     }, {
-      startX: 280,
-      Y: 380,
-      object: this.haybale1
+      startX: 235,
+      Y: 320,
+      object: 'ground'
     }, {
-      startX: 310,
-      Y: 380,
-      object: this.haybale2
+      startX: 305,
+      Y: 351,
+      object: 'ground'
     }, {
-      startX: 330,
+      startX: 389,
       Y: 400,
       object: 'ground'
     }]
@@ -1164,10 +1131,30 @@ class Planet2Env2 {
     //this.planetdesc.draw()
     //createCircle(this.position.x,this.position.y,this.r+10,'lightgray')
     createCircle(this.position.x,this.position.y,this.r,'rgb(74, 117, 177)')
+    // Ship
+    c.fillStyle = 'rgb(182, 182, 182)'
+    c.fillRect(230,390,120,10)
+    var rad = 30 * Math.PI / 180;
+    c.save()
+    c.translate(230, 390)
+    c.rotate(-rad*1.6)
+    c.fillRect(59,80,65,20)
+    c.rotate(rad*3.2)
+    c.fillRect(-40,-13,60,20)
+    c.restore()
+    c.fillRect(198,351,190,13)
+    c.fillRect(224,364,137,30)
+    //c.fillRect(198,351,190,20)
+    c.fillStyle = 'rgb(167, 166, 166)'
+    c.fillRect(235,320,70,31)
+    createCircle(255,336,9,'gray')
+    createCircle(285,336,9,'gray')
+    createCircle(255,336,7,'lightblue')
+    createCircle(285,336,7,'lightblue')
     // Create ground
-    c.fillStyle = 'green'
+    c.fillStyle = 'rgb(17, 70, 123)'
     c.fillRect(120,400,360,10)
-    c.fillStyle = 'rgb(123, 42, 4)'
+    c.fillStyle = 'rgb(23, 75, 126)'
     c.fillRect(125,410,345,10)
     c.fillRect(135,420,330,10)
     c.fillRect(145,430,315,10)
@@ -1177,29 +1164,35 @@ class Planet2Env2 {
     c.fillRect(195,470,210,10)
     c.fillRect(215,480,180,10)
     c.fillRect(230,490,140,10)
-    outlineCircle(this.position.x,this.position.y,this.r+6,'#111',13,1)
-    // Barn
-    c.fillStyle = 'rgb(194, 71, 71)'
-    c.fillRect(370,350,80,50)
-    c.fillRect(390,340,40,10)
-    c.fillStyle = 'rgb(239, 219, 219)'
-    c.fillRect(390,335,40,5)
-    c.fillRect(370,345,20,5)
-    c.fillRect(430,345,20,5)
-    c.fillRect(390,375,5,25)
-    c.fillRect(425,375,5,25)
-    c.fillRect(395,375,30,5)
-    //haybale
-    this.haybale.draw()
-    this.haybale1.draw()
-    this.flower.draw()
-    this.flower1.draw()
-    this.haybale2.draw()
-    this.flower2.draw()
-    this.flower3.draw()
-    this.flower4.draw()
+    // Kraken
+    c.fillStyle = 'rgb(136, 26, 26)'
+    c.fillRect(220,450,60,30)
+    c.fillRect(270,454,60,20)
+    c.fillRect(310,474,60,5)
+    c.fillRect(350,479,50,5)
+    c.fillRect(330,466,50,5)
+    c.fillRect(330,457,30,5)
+    //leg 1
+    c.fillRect(358,449,5,12)
+    c.fillRect(360,463,40,5)
+    c.fillRect(358,444,32,5)
+    c.fillRect(388,346,5,101)
+    c.fillRect(370,346,19,5)
+    //leg 2
+    c.fillRect(328,439,5,18)
+    c.fillRect(302,439,30,5)
+    c.fillRect(302,425,5,18)
+    c.fillRect(190,425,114,5)
+    c.fillRect(190,347,5,80)
+    c.fillRect(190,346,18,5)
+    c.fillStyle = 'black'
+    c.fillRect(228,456,8,6)
+    c.fillRect(228,468,8,6)
+
+    
     this.rain.draw()
-    //this.planetdesc.draw()
+    outlineCircle(this.position.x,this.position.y,this.r+6,'#111',13,1)
+    
 
     // Create clouds
     c.fillStyle = '#f9f4e8'
@@ -1421,16 +1414,15 @@ class Planet2Env1 {
       Y: 400,
       object: 'ground'
     }]
+    this.env = new PlanetEnv({
+      position: this.position,
+      tops: this.tops,
+      burnable: [this.flower,this.flower1,this.flower2,this.flower3,this.flower4],
+      waterable: [this.flower,this.flower1,this.flower2,this.flower3,this.flower4,this.haybale,this.haybale1,this.haybale2]
+    })
   }
   update() {
     this.time += 1
-    if (canvas.mouseHeldTime >= 10 && (canvas.mouseX > 170 && canvas.mouseX < 430)) this.raining = true
-    else this.raining = false
-    if (canvas.strike) { 
-      this.lightningStrike()
-      canvas.strike = false
-      this.strikeTime = 5
-    }
     this.haybale.update()
     this.haybale1.update()
     this.flower.update()
@@ -1439,18 +1431,10 @@ class Planet2Env1 {
     this.flower2.update()
     this.flower3.update()
     this.flower4.update()
-    this.rain.update({x:canvas.mouseX-50,y:165})
-    if (this.raining) this.rain.flow = true
-    else this.rain.flow = false
-    this.checkrainlocation()
-
-    //this.lightningStrike()
-    //if (this.time % 10 == 0) this.planetdesc.update()
+    this.env.update()
   }
   draw() {
     c.save()
-    //this.planetdesc.draw()
-    //createCircle(this.position.x,this.position.y,this.r+10,'lightgray')
     createCircle(this.position.x,this.position.y,this.r,'rgb(74, 117, 177)')
     // Create ground
     c.fillStyle = 'green'
@@ -1487,6 +1471,61 @@ class Planet2Env1 {
     this.flower3.draw()
     this.flower4.draw()
     this.rain.draw()
+
+    // Create clouds
+    this.env.draw()
+
+    c.restore()
+  }
+}
+class PlanetEnv {
+  constructor({ position, tops, burnable=[], waterable=[] }) {
+    // To do:
+    // Change concrete x/y values to this.position.x/y + 100
+    this.position = position
+    this.burnable = burnable
+    this.waterable = waterable
+    this.time = 0
+    this.r = 200
+    this.strikeTime = 0
+    this.raining = false
+    this.rain = new WaterFlow({
+      c: c,
+      position: {
+        x: 200,
+        y: 165
+      },
+      floor: 400
+    })
+    this.rain.flow = false
+    this.rain.rain = true
+    
+    this.tops = tops
+  }
+  update() {
+    this.time += 1
+    if (canvas.mouseHeldTime >= 10 && (canvas.mouseX > 170 && canvas.mouseX < 430)) this.raining = true
+    else this.raining = false
+    if (canvas.strike) { 
+      this.lightningStrike(this.burnable)
+      canvas.strike = false
+      this.strikeTime = 5
+    }
+    this.rain.update({x:canvas.mouseX-50,y:165})
+    if (this.raining) this.rain.flow = true
+    else this.rain.flow = false
+    this.checkrainlocation(this.waterable)
+
+    //this.lightningStrike()
+    //if (this.time % 10 == 0) this.planetdesc.update()
+  }
+  draw() {
+    c.save()
+    //this.planetdesc.draw()
+    //createCircle(this.position.x,this.position.y,this.r,'rgb(74, 117, 177)')
+    //outlineCircle(this.position.x,this.position.y,this.r+6,'#111',13,1)
+
+    this.rain.draw()
     //this.planetdesc.draw()
 
     // Create clouds
@@ -1516,39 +1555,28 @@ class Planet2Env1 {
       if (this.inXRange(obj.position.x,obj.position.x+20,x)) obj.water += 1
     }
   }
-  checkrainlocation() {
+  checkrainlocation(waterable) {
     let w = this.rain.water
     if (w.length > 5) {
       for (let i = 0; i < 5; i++) {
         if (w[i].falling == false) {
           let x = w[i].position.x
-          this.addWaterGrowth(this.flower,x)
-          this.addWaterGrowth(this.flower1,x)
-          this.addWaterGrowth(this.flower2,x)
-          this.addWaterGrowth(this.flower3,x)
-          this.addWaterGrowth(this.flower4,x)
-          this.addWaterGrowth(this.haybale,x)
-          this.addWaterGrowth(this.haybale1,x)
-          this.addWaterGrowth(this.haybale2,x)      
+          waterable.forEach(obj => {
+            this.addWaterGrowth(obj,x)
+          })     
         }
       }
     }
   }
-  lightningStrike() {
+  lightningStrike(burnable) {
     var x = canvas.mouseX
     //console.log(x)
     var ceiling = 165
     var floor = this.tops[0].Y
-    let fp = this.flower.position.x
-    let fp1 = this.flower1.position.x
-    let fp2 = this.flower2.position.x
-    let fp3 = this.flower3.position.x
-    let fp4 = this.flower4.position.x
-    if (x > fp-4 && x < fp+16) this.flower.burnt = true
-    if (x > fp1-4 && x < fp1+16) this.flower1.burnt = true
-    if (x > fp2-4 && x < fp2+16) this.flower2.burnt = true
-    if (x > fp3-4 && x < fp3+16) this.flower3.burnt = true
-    if (x > fp4-4 && x < fp4+16) this.flower4.burnt = true
+    burnable.forEach(obj => {
+      let posX = obj.position.x
+      if (x > posX-4 && x < posX+16) obj.burnt = true
+    })
     // If in lightning x range
     if (x > 170 && x < 430) {
       //console.log('lightning')
@@ -1604,10 +1632,12 @@ class Planet2 {
     // Change concrete x/y values to this.position.x/y + 100
     this.position = position
     this.time = 0
-    this.inMap = true
-    this.inBarn = false
+    this.inMap = false
+    this.inBarn = true
+    this.inShip = false
     this.r = 200
     this.barnEnv = new Planet2Env1({position:this.position})
+    this.shipEnv = new Planet2Env2({position:this.position})
     this.planetdesc = new PlanetDesc({
       position: this.position,
       description: ['LinkedIn Planet',
@@ -1633,6 +1663,8 @@ class Planet2 {
     }
     if (this.inBarn) {
       this.barnEnv.update()
+    } else if (this.inShip) {
+      this.shipEnv.update()
     }
     //this.lightningStrike()
     //if (this.time % 10 == 0) this.planetdesc.update()
@@ -1673,8 +1705,28 @@ class Planet2 {
       c.fillRect(318,400,2,10)
       c.fillRect(329,400,2,10)
       c.fillRect(320,400,10,2)
+
+      // Ship location (x: 374-404, y: 250-280)
+      c.fillStyle = 'rgb(182, 182, 182)'
+      c.fillRect(380,260,20,10)
+      var rad = 30 * Math.PI / 180;
+      c.save()
+      c.translate(380, 260)
+      c.rotate(-rad*2)
+      c.fillRect(1,12,10,10)
+      c.rotate(rad*4)
+      c.fillRect(-2,-4,10,10)
+      c.restore()
+      c.fillRect(374,257,30,5)
+      c.fillStyle = 'rgb(167, 166, 166)'
+      c.fillRect(379,250,20,7)
+      createCircle(385,254,2,'lightblue')
+      createCircle(393,254,2,'lightblue')
+      
     } else if (this.inBarn) {
       this.barnEnv.draw()
+    } else if (this.inShip) {
+      this.shipEnv.draw()
     }
     c.restore()
   }
@@ -1683,6 +1735,7 @@ class Planet2 {
     return false
   }
   enterLocation() {
+    // Ship location (x: 374-404, y: 250-280)
     if (canvas.mouseDown == true) {
       let x = canvas.mouseX
       let y = canvas.mouseY
@@ -1690,8 +1743,10 @@ class Planet2 {
         this.inBarn = true
         this.inMap = false
         //canvas.onMap = false
+      } else if (x >= 374 && x <= 404 && y >= 250 && y <= 280) {
+        this.inShip = true
+        this.inMap = false
       }
-      return false
     }
   }
   randomColor(){ 
@@ -1739,7 +1794,8 @@ function animate() {
         if (fromP2 < canvas.planetRadius) {
           let x = e.clientX
           let y = e.clientY
-          if ((canvas.onMap && x >= 310 && x <= 340 && y >= 387 && y <= 410)) canvas.onMap = false
+          if ((canvas.onMap && x >= 310 && x <= 340 && y >= 387 && y <= 410) || 
+              (canvas.onMap && x >= 374 && x <= 404 && y >= 250 && y <= 280)) canvas.onMap = false
           else window.location.href = 'https://www.linkedin.com/in/justin-sterling-06b806232';
         }
       }
