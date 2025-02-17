@@ -16,11 +16,22 @@ const areaRadius = 100
 //c.fill()
 canvas.mouseX = 0
 canvas.mouseY = 0
+canvas.mouseDown = false
+canvas.onMap = true
 canvas.strike = false
 canvas.spawnPowerUp = false
 canvas.mouseHeldTime = 0
 canvas.planetRadius = 200
-canvas.p2 = {x:300,y:300}
+canvas.p2 = {
+  x:300,
+  y:300,
+  barnlocation: {
+    startX: 310,
+    endX: 340,
+    startY: 387,
+    endY: 410
+  }
+}// Barn location (x: 310-340, y: 387-410)
 canvas.p1 = {x:1000,y:450}
 canvas.interval = null
 //console.log(canvas.mouseX)
@@ -1011,7 +1022,7 @@ class Flower {
     if (this.burnt) this.growthStage = 0
   }
 }
-class Planet2 {
+class Planet2Env2 {
   constructor({ position }) {
     // To do:
     // Change concrete x/y values to this.position.x/y + 100
@@ -1020,14 +1031,6 @@ class Planet2 {
     this.r = 200
     this.strikeTime = 0
     this.raining = false
-    this.planetdesc = new PlanetDesc({
-      position: this.position,
-      description: ['LinkedIn Planet',
-        'Right click to strike lightning',
-        'Hold left mouse down to rain',
-        'Click planet to enter'
-      ]
-    })
     this.rain = new WaterFlow({
       c: c,
       position: {
@@ -1133,34 +1136,6 @@ class Planet2 {
   }
   update() {
     this.time += 1
-    // onmousemove = function(e){
-    //   canvas.mouseX = e.clientX
-    //   canvas.mouseY = e.clientY
-    // }
-    // onmousedown = function(e) {
-    //   canvas.interval = setInterval(()=>{
-    //       canvas.mouseHeldTime += 1
-    //   },50)
-    // }
-    // onmouseup = function(e) {
-    //   if (e.button === 0 && canvas.mouseHeldTime < 4) {
-    //     // Go to link
-    //     window.location.href = 'https://www.linkedin.com/in/justin-sterling-06b806232';
-    //   }
-    //   clearInterval(canvas.interval)
-    //   canvas.interval = null;
-    //   canvas.mouseHeldTime = 0;
-      
-    // }
-    // oncontextmenu = function(e){
-    //   clearInterval(canvas.interval)
-    //   canvas.interval = null;
-    //   canvas.mouseHeldTime = 0;
-    //   e.preventDefault();
-    //   canvas.strike = true
-      
-    //   //console.log('Right-click detected!');
-    // };
     if (canvas.mouseHeldTime >= 10 && (canvas.mouseX > 170 && canvas.mouseX < 430)) this.raining = true
     else this.raining = false
     if (canvas.strike) { 
@@ -1180,7 +1155,6 @@ class Planet2 {
     if (this.raining) this.rain.flow = true
     else this.rain.flow = false
     this.checkrainlocation()
-    if (this.time % 3 == 0) this.planetdesc.update()
 
     //this.lightningStrike()
     //if (this.time % 10 == 0) this.planetdesc.update()
@@ -1225,7 +1199,7 @@ class Planet2 {
     this.flower3.draw()
     this.flower4.draw()
     this.rain.draw()
-    this.planetdesc.draw()
+    //this.planetdesc.draw()
 
     // Create clouds
     c.fillStyle = '#f9f4e8'
@@ -1336,25 +1310,394 @@ class Planet2 {
     return('#'+Math.floor(Math.random()*16777215).toString(16));
   }
 }
-// addEventListener('mousemove', e => {
-//   mousePos.x = e.clientX
-//   mousePos.y = e.clientY
-// })
+class Planet2Env1 {
+  constructor({ position }) {
+    // To do:
+    // Change concrete x/y values to this.position.x/y + 100
+    this.position = position
+    this.time = 0
+    this.r = 200
+    this.strikeTime = 0
+    this.raining = false
+    this.rain = new WaterFlow({
+      c: c,
+      position: {
+        x: 200,
+        y: 165
+      },
+      floor: 400
+    })
+    this.rain.flow = false
+    this.rain.rain = true
+    this.flower = new Flower({
+      position: {
+        x: 220,
+        y: 400
+      },
+      variety: 'sunflower'
+    })
+    this.flower1 = new Flower({
+      position: {
+        x: 194,
+        y: 400
+      },
+      variety: 'yelloworange'
+    })
+    this.flower2 = new Flower({
+      position: {
+        x: 171,
+        y: 400
+      },
+      variety: 'yelloworange'
+    })
+    this.flower3 = new Flower({
+      position: {
+        x: 346,
+        y: 400
+      },
+      variety: 'sunflower'
+    })
+    this.flower4 = new Flower({
+      position: {
+        x: 375,
+        y: 400
+      },
+      variety: 'yelloworange'
+    })
+    //this.flower.growthStage = 3
+    //this.flower1.growthStage = 3
+    this.haybale = new HayBale({
+      position: {
+        x: 240,
+        y: 380
+      },
+      size: 20
+    })
+    this.haybale1 = new HayBale({
+      position: {
+        x: 280,
+        y: 380
+      },
+      size: 20
+    })
+    this.haybale2 = new HayBale({
+      position: {
+        x: 310,
+        y: 380
+      },
+      size: 20
+    })
+    this.barn = {
+      position: {
+        x: 340,
+        y: 380
+      },
+      size: 100,
+      color: '#c2a770'
+    }
+    
+    this.tops = [{
+      startX: 0,
+      Y: 400,
+      object: 'ground'
+    }, {
+      startX: 240,
+      Y: 380,
+      object: this.haybale
+    }, {
+      startX: 260,
+      Y: 400,
+      object: 'ground'
+    }, {
+      startX: 280,
+      Y: 380,
+      object: this.haybale1
+    }, {
+      startX: 310,
+      Y: 380,
+      object: this.haybale2
+    }, {
+      startX: 330,
+      Y: 400,
+      object: 'ground'
+    }]
+  }
+  update() {
+    this.time += 1
+    if (canvas.mouseHeldTime >= 10 && (canvas.mouseX > 170 && canvas.mouseX < 430)) this.raining = true
+    else this.raining = false
+    if (canvas.strike) { 
+      this.lightningStrike()
+      canvas.strike = false
+      this.strikeTime = 5
+    }
+    this.haybale.update()
+    this.haybale1.update()
+    this.flower.update()
+    this.flower1.update()
+    this.haybale2.update()
+    this.flower2.update()
+    this.flower3.update()
+    this.flower4.update()
+    this.rain.update({x:canvas.mouseX-50,y:165})
+    if (this.raining) this.rain.flow = true
+    else this.rain.flow = false
+    this.checkrainlocation()
 
-// function render() {
-//   //createCircle(300,300,200,'white')
-//   c.fillStyle = 'black'
-//   c.fillRect(0, 0, canvas.width, canvas.height)
+    //this.lightningStrike()
+    //if (this.time % 10 == 0) this.planetdesc.update()
+  }
+  draw() {
+    c.save()
+    //this.planetdesc.draw()
+    //createCircle(this.position.x,this.position.y,this.r+10,'lightgray')
+    createCircle(this.position.x,this.position.y,this.r,'rgb(74, 117, 177)')
+    // Create ground
+    c.fillStyle = 'green'
+    c.fillRect(120,400,360,10)
+    c.fillStyle = 'rgb(123, 42, 4)'
+    c.fillRect(125,410,345,10)
+    c.fillRect(135,420,330,10)
+    c.fillRect(145,430,315,10)
+    c.fillRect(155,440,290,10)
+    c.fillRect(165,450,275,10)
+    c.fillRect(180,460,245,10)
+    c.fillRect(195,470,210,10)
+    c.fillRect(215,480,180,10)
+    c.fillRect(230,490,140,10)
+    outlineCircle(this.position.x,this.position.y,this.r+6,'#111',13,1)
+    // Barn
+    c.fillStyle = 'rgb(194, 71, 71)'
+    c.fillRect(370,350,80,50)
+    c.fillRect(390,340,40,10)
+    c.fillStyle = 'rgb(239, 219, 219)'
+    c.fillRect(390,335,40,5)
+    c.fillRect(370,345,20,5)
+    c.fillRect(430,345,20,5)
+    c.fillRect(390,375,5,25)
+    c.fillRect(425,375,5,25)
+    c.fillRect(395,375,30,5)
+    //haybale
+    this.haybale.draw()
+    this.haybale1.draw()
+    this.flower.draw()
+    this.flower1.draw()
+    this.haybale2.draw()
+    this.flower2.draw()
+    this.flower3.draw()
+    this.flower4.draw()
+    this.rain.draw()
+    //this.planetdesc.draw()
 
-//   c.globalCompositeOperation = 'destination-out'
-//   c.fillStyle = 'white'
-//   c.beginPath()
-//   c.arc(mousePos.x, mousePos.y, areaRadius, 0, Math.PI * 2)
-//   c.fill()
-  
+    // Create clouds
+    c.fillStyle = '#f9f4e8'
+    c.globalAlpha = .8
+    // Lightning minx: 170 maxx: 290
+    // y: 160
+    // Clouds
+    c.fillRect(200,150,150,40)
+    c.fillRect(220,120,150,60)
+    c.fillRect(210,130,180,70)
+    c.fillRect(250,150,180,40)
+    c.fillRect(170,155,180,40)
 
-//   c.globalCompositeOperation = 'source-over'
-// }
+    c.restore()
+  }
+  inXRange(xmin,xmax,x) {
+    if (x > xmin && x < xmax) return true
+    return false
+  }
+  addWaterGrowth(obj,x) {
+    if (obj.type == 'flower') {
+      if (this.inXRange(obj.position.x-4,obj.position.x+16,x)) {
+        obj.water += 1
+      }
+    } else if (obj.type == 'haybale') {
+      if (this.inXRange(obj.position.x,obj.position.x+20,x)) obj.water += 1
+    }
+  }
+  checkrainlocation() {
+    let w = this.rain.water
+    if (w.length > 5) {
+      for (let i = 0; i < 5; i++) {
+        if (w[i].falling == false) {
+          let x = w[i].position.x
+          this.addWaterGrowth(this.flower,x)
+          this.addWaterGrowth(this.flower1,x)
+          this.addWaterGrowth(this.flower2,x)
+          this.addWaterGrowth(this.flower3,x)
+          this.addWaterGrowth(this.flower4,x)
+          this.addWaterGrowth(this.haybale,x)
+          this.addWaterGrowth(this.haybale1,x)
+          this.addWaterGrowth(this.haybale2,x)      
+        }
+      }
+    }
+  }
+  lightningStrike() {
+    var x = canvas.mouseX
+    //console.log(x)
+    var ceiling = 165
+    var floor = this.tops[0].Y
+    let fp = this.flower.position.x
+    let fp1 = this.flower1.position.x
+    let fp2 = this.flower2.position.x
+    let fp3 = this.flower3.position.x
+    let fp4 = this.flower4.position.x
+    if (x > fp-4 && x < fp+16) this.flower.burnt = true
+    if (x > fp1-4 && x < fp1+16) this.flower1.burnt = true
+    if (x > fp2-4 && x < fp2+16) this.flower2.burnt = true
+    if (x > fp3-4 && x < fp3+16) this.flower3.burnt = true
+    if (x > fp4-4 && x < fp4+16) this.flower4.burnt = true
+    // If in lightning x range
+    if (x > 170 && x < 430) {
+      //console.log('lightning')
+      for (let i = 0; i < this.tops.length; i++) {
+        if (this.tops[i].startX > x) {
+          floor = this.tops[i-1].Y
+          let obj = this.tops[i-1].object
+          if (obj != 'ground' && obj.type == 'haybale') {
+            obj.burning = true
+          }
+          break
+        }
+      }
+      // Number of lightning segments
+      let segm = 3//Math.floor(Math.random()*4)
+      let segLength = (floor - ceiling) / segm
+      //console.log(ceiling)
+      let dev = Math.floor(segLength * .5)
+      c.save()
+      c.lineWidth = 5
+      c.strokeStyle = 'yellow'
+      c.shadowBlur = 10
+      c.shadowColor = 'yellow'
+      let tempdev = -20
+      let cy = ceiling
+      let linestart = x
+      let flip = 1
+      if (Math.random() < .5) flip *= -1
+      //console.log(dev)
+      for (let i = 0; i < segm; i++) {
+        c.beginPath();
+        c.moveTo(linestart,cy-2);
+        cy += segLength
+        tempdev = Math.random()*dev
+        tempdev *= flip
+        flip *= -1
+        linestart += tempdev
+        if (segm-1 == i) linestart = x
+        c.lineTo(linestart,cy);
+        c.stroke()
+      }
+      c.restore()
+
+    }
+  }
+  randomColor(){ 
+    return('#'+Math.floor(Math.random()*16777215).toString(16));
+  }
+}
+class Planet2 {
+  constructor({ position }) {
+    // To do:
+    // Change concrete x/y values to this.position.x/y + 100
+    this.position = position
+    this.time = 0
+    this.inMap = true
+    this.inBarn = false
+    this.r = 200
+    this.barnEnv = new Planet2Env1({position:this.position})
+    this.planetdesc = new PlanetDesc({
+      position: this.position,
+      description: ['LinkedIn Planet',
+        'Right click to strike lightning',
+        'Hold left mouse down to rain',
+        'Click planet to enter'
+      ]
+    })
+    this.barn = {
+      position: {
+        x: 340,
+        y: 380
+      },
+      size: 100,
+      color: '#c2a770'
+    }
+  }
+  update() {
+    this.time += 1
+    if (this.time % 3 == 0) this.planetdesc.update()
+    if (this.inMap) { 
+      this.enterLocation()
+    }
+    if (this.inBarn) {
+      this.barnEnv.update()
+    }
+    //this.lightningStrike()
+    //if (this.time % 10 == 0) this.planetdesc.update()
+  }
+  draw() {
+    c.save()
+    //this.planetdesc.draw()
+    //createCircle(this.position.x,this.position.y,this.r+10,'lightgray')
+    if (this.inMap) {
+      createCircle(this.position.x,this.position.y,this.r,'rgb(12, 49, 101)')
+      c.fillStyle = 'rgb(8, 79, 9)'
+      c.fillRect(200,200,50,100)
+      c.fillRect(230,170,50,100)
+      c.fillRect(180,200,50,30)
+      c.fillRect(195,190,50,50)
+      c.fillRect(250,200,10,80)
+      c.fillRect(230,400,150,50)
+      c.fillRect(240,450,100,10)
+      c.fillRect(300,350,100,80)
+      c.fillRect(270,380,30,30)
+      c.fillRect(100,280,30,80)
+      c.fillRect(130,290,20,50)
+      c.fillRect(430,160,20,50)
+      c.fillRect(430,165,30,50)
+      c.fillRect(440,175,30,50)
+      c.fillRect(460,187,20,34)
+      c.fillRect(425,163,10,30)
+      outlineCircle(this.position.x,this.position.y,this.r+6,'#111',13,1)
+      
+      // Barn location (x: 310-340, y: 387-410)
+      c.fillStyle = 'rgb(194, 71, 71)'
+      c.fillRect(310,390,30,20)
+      c.fillRect(318,387,15,4)
+      c.fillStyle = 'rgb(239, 219, 219)'
+      c.fillRect(318,385,15,2)
+      c.fillRect(310,388,8,2)
+      c.fillRect(333,388,7,2)
+      c.fillRect(318,400,2,10)
+      c.fillRect(329,400,2,10)
+      c.fillRect(320,400,10,2)
+    } else if (this.inBarn) {
+      this.barnEnv.draw()
+    }
+    c.restore()
+  }
+  inXRange(xmin,xmax,x) {
+    if (x > xmin && x < xmax) return true
+    return false
+  }
+  enterLocation() {
+    if (canvas.mouseDown == true) {
+      let x = canvas.mouseX
+      let y = canvas.mouseY
+      if (x >= 310 && x <= 340 && y >= 387 && y <= 410) {
+        this.inBarn = true
+        this.inMap = false
+        //canvas.onMap = false
+      }
+      return false
+    }
+  }
+  randomColor(){ 
+    return('#'+Math.floor(Math.random()*16777215).toString(16));
+  }
+}
 const p = new Planet({
     position: {
       x: 300,
@@ -1381,17 +1724,24 @@ function animate() {
       canvas.mouseY = e.clientY
     }
     onmousedown = function(e) {
+      canvas.mouseDown = true
       canvas.interval = setInterval(()=>{
           canvas.mouseHeldTime += 1
       },50)
     }
     onmouseup = function(e) {
+      canvas.mouseDown = false
       if (e.button === 0 && canvas.mouseHeldTime < 4) {
         // Go to link
         let fromP1 = Math.sqrt( Math.pow((e.clientY - canvas.p1.y), 2) + Math.pow((e.clientX - canvas.p1.x), 2) )
         let fromP2 = Math.sqrt( Math.pow((e.clientY - canvas.p2.y), 2) + Math.pow((e.clientX - canvas.p2.x), 2) )
         if (fromP1 < canvas.planetRadius) window.location.href = 'https://github.com/Lucarik';
-        if (fromP2 < canvas.planetRadius) window.location.href = 'https://www.linkedin.com/in/justin-sterling-06b806232';
+        if (fromP2 < canvas.planetRadius) {
+          let x = e.clientX
+          let y = e.clientY
+          if ((canvas.onMap && x >= 310 && x <= 340 && y >= 387 && y <= 410)) canvas.onMap = false
+          else window.location.href = 'https://www.linkedin.com/in/justin-sterling-06b806232';
+        }
       }
       clearInterval(canvas.interval)
       canvas.interval = null;
@@ -1463,12 +1813,12 @@ function drawLogo(x,y) {
   c.strokeRect(x,y,100,100)
   drawL(x+2,y+2)
 }
-flashlight(c1,250,550,300)
+//flashlight(c1,250,550,300)
 mycanvas.addEventListener('mousemove', (event) => {
   let x = event.clientX;
   let y = event.clientY;
   let radius = 300;
-  flashlight(c1,x,y,radius)
+  //flashlight(c1,x,y,radius)
 })
 
 //drawLogo(10,300)
