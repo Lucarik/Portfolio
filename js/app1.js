@@ -261,7 +261,7 @@ class Snake {
   }
 }
 class PlanetDesc {
-  constructor({position, description}) {
+  constructor({position, description,offset}) {
     this.position = position
     this.description = description
     this.active = false
@@ -269,6 +269,7 @@ class PlanetDesc {
     this.currentSentence = 0
     this.mouseX = 0
     this.mouseY = 0
+    this.offset = offset
     this.outputWords = []
     for (let i = 0; i < description.length; i++) {
       this.description[i] = this.splitString(description[i])
@@ -277,7 +278,7 @@ class PlanetDesc {
   draw() {
     //this.drawText(this.position.x - 250,this.position.y-250,this.outputWords)
     for (let i = 0; i < this.outputWords.length; i++) {
-      this.drawText(this.position.x - 250,(this.position.y-250)+(i*20),this.outputWords[i].join(''))
+      this.drawText(this.position.x - 290 + this.offset.x,(this.position.y-268 + this.offset.y)+(i*20),this.outputWords[i].join(''))
     }
     //c.fillStyle = 'red'
     //c.fillRect(this.position.x - 250,this.position.y-250,20,20)
@@ -676,8 +677,12 @@ class Planet1 {
       position: this.position,
       description: ['Github Planet',
         'Right click to create powerup',
-        'Click planet to enter'
-      ]
+        'Click planet to enter Github'
+      ],
+      offset: {
+        x: 10,
+        y: 30
+      }
     })
     this.snakes = []
     // this.addSnake(200,300,{x: 1, y: 0},'green')
@@ -699,10 +704,11 @@ class Planet1 {
     this.powerups = []
   }
   update() {
+    this.time += 1
     if (this.time % 3 == 0) this.planetdesc.update()
     let fromC = Math.sqrt( Math.pow((canvas.mouseY - this.position.y), 2) + Math.pow((canvas.mouseX - this.position.x), 2) )
     if (fromC < this.r*2) {
-      this.time += 1
+      
       
       this.snakes.forEach(s => s.update())
       this.addRandomSnake()
@@ -1725,10 +1731,15 @@ class Planet2 {
     this.planetdesc = new PlanetDesc({
       position: this.position,
       description: ['LinkedIn Planet',
+        'Click anywhere on planet to enter linkedIn',
+        'Otherwise click location to enter',
+        'Hold left mouse down for rain',
         'Right click to strike lightning',
-        'Hold left mouse down to rain',
-        'Click planet to enter'
-      ]
+      ],
+      offset: {
+        x: 0,
+        y: -4
+      }
     })
     this.barn = {
       position: {
