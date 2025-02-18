@@ -1,4 +1,4 @@
-import { Fire,WaterFlow,StarMaker } from './classes.js';
+import { Particle,Fire,WaterFlow,StarMaker } from './classes.js';
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 canvas.width = window.innerWidth;
@@ -1022,6 +1022,184 @@ class Flower {
     if (this.burnt) this.growthStage = 0
   }
 }
+class SquidLeg {
+  constructor({legPositions}) {
+    this.burnt = false
+    this.level = 0
+    this.type = 'squid'
+    this.legPositions = legPositions
+    this.position = {x:legPositions.p0.s3.x,y:legPositions.p0.s3.y}
+  }
+  draw() {
+    c.save()
+    let {s1,s2,s3} = this.getSegments(this.level)
+    //console.log(s3.x)
+    c.fillStyle = 'rgb(136, 26, 26)'
+    c.fillRect(s1.x,s1.y,s1.w,s1.h)
+    c.fillRect(s2.x,s2.y,s2.w,s2.h)
+    c.fillRect(s3.x,s3.y,s3.w,s3.h)
+    c.restore()
+  }
+  update() {
+    if (this.burnt) {
+      if (this.level < 3) {
+        this.level += 1
+        this.burnt = false
+      }
+    }
+  }
+  getSegments(level) {
+    let p = null
+    if (level == 0) {
+      p = this.legPositions.p0
+    } else if (level == 1) {
+      p = this.legPositions.p1
+    } else if (level == 2) {
+      p = this.legPositions.p2
+    } else {
+      p = this.legPositions.p3
+    }
+    let s1 = p.s1, s2 = p.s2, s3 = p.s3
+    this.position.x = s3.x, this.position.y = s3.y
+    return {s1,s2,s3}
+  }
+}
+class FireworkExplosion {
+  constructor({position,color}) {
+    this.position = position
+    this.color = color
+    this.start = false
+    this.particles = []
+  }
+  draw() {
+    this.particles.forEach(p => p.draw())
+  }
+  update() {
+    this.particles.forEach(p => p.update())
+  }
+  initializeP(p) {
+    this.position = p
+    this.initializeParticles()
+  }
+  initializeParticles() {
+    for (let i = 0; i < 10; i++) {
+      const p = new Particle({
+        c: c,
+        position: {
+          x: this.position.x,
+          y: this.position.y
+        },
+        color: this.color,
+        velocity: {
+          x: Math.random()*.2 - .1,
+          y: Math.random()*.2 - .1
+        },
+        size: 3
+      })
+      //console.log(p)
+      this.particles.push(p)
+    }
+    // console.log(this.particles[0].velocity)
+    // console.log(this.particles[29].velocity)
+    //console.log(this.particles.length)
+  }
+}
+class Firework {
+  constructor({ position,velocity,color }) {
+    this.position = position
+    this.velocity = velocity
+    this.color = color
+    this.life = 0
+    this.expand = false
+    this.done = false
+    this.expl = new FireworkExplosion({
+      position: this.position,
+      color: this.color
+    })
+  }
+  draw() {
+    if (this.expand) this.expl.draw()
+    else {
+      c.save()
+      c.fillStyle = this.color
+      c.fillRect(this.position.x,this.position.y,2,4)
+      c.restore()
+    }
+  }
+  update() {
+    
+    if (this.expand) {
+      this.life += 1
+      this.expl.update()
+    } else {
+      this.position.x += this.velocity.x
+      this.position.y += this.velocity.y
+      this.velocity.y += .01
+      if (this.velocity.y >= 0) {
+        if (Math.random() < .05) {
+            this.expand = true
+            this.expl.initializeP(this.position)
+            //console.log(this.expl.color)
+          }
+      }
+    }
+    if (this.life > 300) this.done = true
+    
+  }
+  createExplosion() {
+
+  }
+}
+class FireworkCreator {
+  constructor({ position }) {
+    this.position = position
+    this.fireworks = []
+    this.active = false
+  }
+  draw() {
+    this.fireworks.forEach(f => f.draw())
+  }
+  update() {
+    this.fireworks.forEach(f => f.update())
+    if (this.active) this.addFirework()
+    this.removeFireworks()
+  }
+  addFirework() {
+    // Logic to add firework
+    if (Math.random() < .01) { 
+      // Chance of creating a new firework 
+      const f = new Firework({
+          position: {
+            x: this.position.x,
+            y: this.position.y
+          },
+          velocity: {
+            x: Math.random()*.5 - .25,
+            y: -(Math.random()*1.7 + .5)
+          },
+          color: this.randomColor()
+      })
+      this.fireworks.push(f)
+    }
+  }
+  removeFirework(i) {
+      this.fireworks.splice(i,1)
+  }
+  removeFireworks() {
+      let rem = []
+      let i = 0
+      this.fireworks.forEach(f => {
+          if (f.done) {
+              rem.push(i)
+          }
+          i += 1
+      })
+      rem.forEach(i => this.removeFirework(i))
+  }
+  randomColor(){ 
+    return('#'+Math.floor(Math.random()*16777215).toString(16));
+  }
+}
 class Planet2Env2 {
   constructor({ position }) {
     // To do:
@@ -1041,43 +1219,60 @@ class Planet2Env2 {
     })
     this.rain.flow = false
     this.rain.rain = true
-    this.flower = new Flower({
-      position: {
-        x: 220,
-        y: 400
-      },
-      variety: 'sunflower'
+    this.firework = new FireworkCreator({
+      position: {x:340,y:346}
     })
-    this.flower1 = new Flower({
-      position: {
-        x: 194,
-        y: 400
-      },
-      variety: 'yelloworange'
+    this.firework1 = new FireworkCreator({
+      position: {x:260,y:346}
     })
-    this.flower2 = new Flower({
-      position: {
-        x: 171,
-        y: 400
-      },
-      variety: 'yelloworange'
+    this.leg1 = new SquidLeg({
+      legPositions: {
+        p0: {
+          s1: {x: 358,y: 444,w: 25,h: 5},
+          s2: {x: 380,y: 346,w: 5,h: 101},
+          s3: {x: 370,y: 346,w: 19,h: 5},
+        },
+        p1: {
+          s1: {x: 338,y: 444,w: 25,h: 5},
+          s2: {x: 337,y: 346,w: 5,h: 101},
+          s3: {x: 332,y: 346,w: 19,h: 5},
+        },
+        p2: {
+          s1: {x: 290,y: 444,w: 72,h: 5},
+          s2: {x: 290,y: 320,w: 5,h: 128},
+          s3: {x: 280,y: 315,w: 19,h: 5},
+        },
+        p3: {
+          s1: {x: 358,y: 444,w: 32,h: 5},
+          s2: {x: 385,y: 444,w: 5,h: 10},
+          s3: {x: 385,y: 449,w: 35,h: 5},
+        }
+      }
     })
-    this.flower3 = new Flower({
-      position: {
-        x: 346,
-        y: 400
-      },
-      variety: 'sunflower'
+    this.leg2 = new SquidLeg({
+      legPositions: {
+        p0: {
+          s1: {x: 210,y: 425,w: 97,h: 5},
+          s2: {x: 210,y: 347,w: 5,h: 80},
+          s3: {x: 199,y: 346,w: 18,h: 5},
+        },
+        p1: {
+          s1: {x: 225,y: 425,w: 82,h: 5},
+          s2: {x: 225,y: 347,w: 5,h: 80},
+          s3: {x: 220,y: 346,w: 18,h: 5},
+        },
+        p2: {
+          s1: {x: 245,y: 425,w: 47,h: 5},
+          s2: {x: 245,y: 320,w: 5,h: 110},
+          s3: {x: 236,y: 315,w: 18,h: 5},
+        },
+        p3: {
+          s1: {x: 315,y: 425,w: 47,h: 5},
+          s2: {x: 358,y: 415,w: 5,h: 11},
+          s3: {x: 358,y: 415,w: 58,h: 5},
+        }
+      }
     })
-    this.flower4 = new Flower({
-      position: {
-        x: 375,
-        y: 400
-      },
-      variety: 'yelloworange'
-    })
-    //this.flower.growthStage = 3
-    //this.flower1.growthStage = 3
     
     this.tops = [{
       startX: 0,
@@ -1100,31 +1295,20 @@ class Planet2Env2 {
       Y: 400,
       object: 'ground'
     }]
+    this.env = new PlanetEnv({
+      position: this.position,
+      tops: this.tops,
+      burnable: [this.leg1,this.leg2]
+    })
   }
   update() {
     this.time += 1
-    if (canvas.mouseHeldTime >= 10 && (canvas.mouseX > 170 && canvas.mouseX < 430)) this.raining = true
-    else this.raining = false
-    if (canvas.strike) { 
-      this.lightningStrike()
-      canvas.strike = false
-      this.strikeTime = 5
-    }
-    this.haybale.update()
-    this.haybale1.update()
-    this.flower.update()
-    this.flower1.update()
-    this.haybale2.update()
-    this.flower2.update()
-    this.flower3.update()
-    this.flower4.update()
-    this.rain.update({x:canvas.mouseX-50,y:165})
-    if (this.raining) this.rain.flow = true
-    else this.rain.flow = false
-    this.checkrainlocation()
-
-    //this.lightningStrike()
-    //if (this.time % 10 == 0) this.planetdesc.update()
+    this.env.update()
+    this.leg1.update()
+    this.leg2.update()
+    this.checkFireworkStatus()
+    this.firework.update()
+    this.firework1.update()
   }
   draw() {
     c.save()
@@ -1175,132 +1359,31 @@ class Planet2Env2 {
     //leg 1
     c.fillRect(358,449,5,12)
     c.fillRect(360,463,40,5)
-    c.fillRect(358,444,32,5)
-    c.fillRect(388,346,5,101)
-    c.fillRect(370,346,19,5)
+    this.leg1.draw()
     //leg 2
     c.fillRect(328,439,5,18)
     c.fillRect(302,439,30,5)
     c.fillRect(302,425,5,18)
-    c.fillRect(190,425,114,5)
-    c.fillRect(190,347,5,80)
-    c.fillRect(190,346,18,5)
+    this.leg2.draw()
     c.fillStyle = 'black'
     c.fillRect(228,456,8,6)
     c.fillRect(228,468,8,6)
 
     
-    this.rain.draw()
+    this.env.draw()
+    this.firework.draw()
+    this.firework1.draw()
+    //this.rain.draw()
     outlineCircle(this.position.x,this.position.y,this.r+6,'#111',13,1)
-    
 
-    // Create clouds
-    c.fillStyle = '#f9f4e8'
-    c.globalAlpha = .8
-    // Lightning minx: 170 maxx: 290
-    // y: 160
-    // Clouds
-    c.fillRect(200,150,150,40)
-    c.fillRect(220,120,150,60)
-    c.fillRect(210,130,180,70)
-    c.fillRect(250,150,180,40)
-    c.fillRect(170,155,180,40)
 
     c.restore()
   }
-  inXRange(xmin,xmax,x) {
-    if (x > xmin && x < xmax) return true
-    return false
-  }
-  addWaterGrowth(obj,x) {
-    if (obj.type == 'flower') {
-      if (this.inXRange(obj.position.x-4,obj.position.x+16,x)) {
-        obj.water += 1
-      }
-    } else if (obj.type == 'haybale') {
-      if (this.inXRange(obj.position.x,obj.position.x+20,x)) obj.water += 1
+  checkFireworkStatus() {
+    if (this.leg1.level == 3 && this.leg2.level == 3) {
+      this.firework.active = true
+      this.firework1.active = true
     }
-  }
-  checkrainlocation() {
-    let w = this.rain.water
-    if (w.length > 5) {
-      for (let i = 0; i < 5; i++) {
-        if (w[i].falling == false) {
-          let x = w[i].position.x
-          this.addWaterGrowth(this.flower,x)
-          this.addWaterGrowth(this.flower1,x)
-          this.addWaterGrowth(this.flower2,x)
-          this.addWaterGrowth(this.flower3,x)
-          this.addWaterGrowth(this.flower4,x)
-          this.addWaterGrowth(this.haybale,x)
-          this.addWaterGrowth(this.haybale1,x)
-          this.addWaterGrowth(this.haybale2,x)      
-        }
-      }
-    }
-  }
-  lightningStrike() {
-    var x = canvas.mouseX
-    //console.log(x)
-    var ceiling = 165
-    var floor = this.tops[0].Y
-    let fp = this.flower.position.x
-    let fp1 = this.flower1.position.x
-    let fp2 = this.flower2.position.x
-    let fp3 = this.flower3.position.x
-    let fp4 = this.flower4.position.x
-    if (x > fp-4 && x < fp+16) this.flower.burnt = true
-    if (x > fp1-4 && x < fp1+16) this.flower1.burnt = true
-    if (x > fp2-4 && x < fp2+16) this.flower2.burnt = true
-    if (x > fp3-4 && x < fp3+16) this.flower3.burnt = true
-    if (x > fp4-4 && x < fp4+16) this.flower4.burnt = true
-    // If in lightning x range
-    if (x > 170 && x < 430) {
-      //console.log('lightning')
-      for (let i = 0; i < this.tops.length; i++) {
-        if (this.tops[i].startX > x) {
-          floor = this.tops[i-1].Y
-          let obj = this.tops[i-1].object
-          if (obj != 'ground' && obj.type == 'haybale') {
-            obj.burning = true
-          }
-          break
-        }
-      }
-      // Number of lightning segments
-      let segm = 3//Math.floor(Math.random()*4)
-      let segLength = (floor - ceiling) / segm
-      //console.log(ceiling)
-      let dev = Math.floor(segLength * .5)
-      c.save()
-      c.lineWidth = 5
-      c.strokeStyle = 'yellow'
-      c.shadowBlur = 10
-      c.shadowColor = 'yellow'
-      let tempdev = -20
-      let cy = ceiling
-      let linestart = x
-      let flip = 1
-      if (Math.random() < .5) flip *= -1
-      //console.log(dev)
-      for (let i = 0; i < segm; i++) {
-        c.beginPath();
-        c.moveTo(linestart,cy-2);
-        cy += segLength
-        tempdev = Math.random()*dev
-        tempdev *= flip
-        flip *= -1
-        linestart += tempdev
-        if (segm-1 == i) linestart = x
-        c.lineTo(linestart,cy);
-        c.stroke()
-      }
-      c.restore()
-
-    }
-  }
-  randomColor(){ 
-    return('#'+Math.floor(Math.random()*16777215).toString(16));
   }
 }
 class Planet2Env1 {
@@ -1575,7 +1658,8 @@ class PlanetEnv {
     var floor = this.tops[0].Y
     burnable.forEach(obj => {
       let posX = obj.position.x
-      if (x > posX-4 && x < posX+16) obj.burnt = true
+      if (obj.type == 'squid' && x > posX && x < posX+18) obj.burnt = true
+      else if (x > posX-4 && x < posX+16) obj.burnt = true
     })
     // If in lightning x range
     if (x > 170 && x < 430) {
@@ -1632,8 +1716,8 @@ class Planet2 {
     // Change concrete x/y values to this.position.x/y + 100
     this.position = position
     this.time = 0
-    this.inMap = false
-    this.inBarn = true
+    this.inMap = true
+    this.inBarn = false
     this.inShip = false
     this.r = 200
     this.barnEnv = new Planet2Env1({position:this.position})
@@ -1663,76 +1747,85 @@ class Planet2 {
     }
     if (this.inBarn) {
       this.barnEnv.update()
+      this.exitLocation()
     } else if (this.inShip) {
       this.shipEnv.update()
+      this.exitLocation()
     }
-    //this.lightningStrike()
-    //if (this.time % 10 == 0) this.planetdesc.update()
   }
   draw() {
     c.save()
-    //this.planetdesc.draw()
-    //createCircle(this.position.x,this.position.y,this.r+10,'lightgray')
+    this.planetdesc.draw()
     if (this.inMap) {
-      createCircle(this.position.x,this.position.y,this.r,'rgb(12, 49, 101)')
-      c.fillStyle = 'rgb(8, 79, 9)'
-      c.fillRect(200,200,50,100)
-      c.fillRect(230,170,50,100)
-      c.fillRect(180,200,50,30)
-      c.fillRect(195,190,50,50)
-      c.fillRect(250,200,10,80)
-      c.fillRect(230,400,150,50)
-      c.fillRect(240,450,100,10)
-      c.fillRect(300,350,100,80)
-      c.fillRect(270,380,30,30)
-      c.fillRect(100,280,30,80)
-      c.fillRect(130,290,20,50)
-      c.fillRect(430,160,20,50)
-      c.fillRect(430,165,30,50)
-      c.fillRect(440,175,30,50)
-      c.fillRect(460,187,20,34)
-      c.fillRect(425,163,10,30)
-      outlineCircle(this.position.x,this.position.y,this.r+6,'#111',13,1)
-      
-      // Barn location (x: 310-340, y: 387-410)
-      c.fillStyle = 'rgb(194, 71, 71)'
-      c.fillRect(310,390,30,20)
-      c.fillRect(318,387,15,4)
-      c.fillStyle = 'rgb(239, 219, 219)'
-      c.fillRect(318,385,15,2)
-      c.fillRect(310,388,8,2)
-      c.fillRect(333,388,7,2)
-      c.fillRect(318,400,2,10)
-      c.fillRect(329,400,2,10)
-      c.fillRect(320,400,10,2)
-
-      // Ship location (x: 374-404, y: 250-280)
-      c.fillStyle = 'rgb(182, 182, 182)'
-      c.fillRect(380,260,20,10)
-      var rad = 30 * Math.PI / 180;
-      c.save()
-      c.translate(380, 260)
-      c.rotate(-rad*2)
-      c.fillRect(1,12,10,10)
-      c.rotate(rad*4)
-      c.fillRect(-2,-4,10,10)
-      c.restore()
-      c.fillRect(374,257,30,5)
-      c.fillStyle = 'rgb(167, 166, 166)'
-      c.fillRect(379,250,20,7)
-      createCircle(385,254,2,'lightblue')
-      createCircle(393,254,2,'lightblue')
-      
+      this.createMap()
     } else if (this.inBarn) {
       this.barnEnv.draw()
+      this.createReturn()
     } else if (this.inShip) {
       this.shipEnv.draw()
+      this.createReturn()
     }
     c.restore()
   }
-  inXRange(xmin,xmax,x) {
-    if (x > xmin && x < xmax) return true
-    return false
+  createMap() {
+    createCircle(this.position.x,this.position.y,this.r,'rgb(12, 49, 101)')
+    c.fillStyle = 'rgb(8, 79, 9)'
+    c.fillRect(200,200,50,100)
+    c.fillRect(230,170,50,100)
+    c.fillRect(180,200,50,30)
+    c.fillRect(195,190,50,50)
+    c.fillRect(250,200,10,80)
+    c.fillRect(230,400,150,50)
+    c.fillRect(240,450,100,10)
+    c.fillRect(300,350,100,80)
+    c.fillRect(270,380,30,30)
+    c.fillRect(100,280,30,80)
+    c.fillRect(130,290,20,50)
+    c.fillRect(430,160,20,50)
+    c.fillRect(430,165,30,50)
+    c.fillRect(440,175,30,50)
+    c.fillRect(460,187,20,34)
+    c.fillRect(425,163,10,30)
+    outlineCircle(this.position.x,this.position.y,this.r+6,'#111',13,1)
+      
+    // Barn location (x: 310-340, y: 387-410)
+    c.fillStyle = 'rgb(194, 71, 71)'
+    c.fillRect(310,390,30,20)
+    c.fillRect(318,387,15,4)
+    c.fillStyle = 'rgb(239, 219, 219)'
+    c.fillRect(318,385,15,2)
+    c.fillRect(310,388,8,2)
+    c.fillRect(333,388,7,2)
+    c.fillRect(318,400,2,10)
+    c.fillRect(329,400,2,10)
+    c.fillRect(320,400,10,2)
+
+    // Ship location (x: 374-404, y: 250-280)
+    c.fillStyle = 'rgb(182, 182, 182)'
+    c.fillRect(380,260,20,10)
+    var rad = 30 * Math.PI / 180;
+    c.save()
+    c.translate(380, 260)
+    c.rotate(-rad*2)
+    c.fillRect(1,12,10,10)
+    c.rotate(rad*4)
+    c.fillRect(-2,-4,10,10)
+    c.restore()
+    c.fillRect(374,257,30,5)
+    c.fillStyle = 'rgb(167, 166, 166)'
+    c.fillRect(379,250,20,7)
+    createCircle(385,254,2,'lightblue')
+    createCircle(393,254,2,'lightblue')
+  }
+  createReturn() {
+    // x: 270-330, y: 417-443
+    c.fillStyle = 'rgb(36, 35, 35)'
+    c.fillRect(270,420,60,20)
+    c.fillRect(280,417,40,5)
+    c.fillRect(280,438,40,5)
+    c.font = "bold 15px Arial";
+    c.fillStyle = '#eee'
+    c.fillText('Return',276,435,50)
   }
   enterLocation() {
     // Ship location (x: 374-404, y: 250-280)
@@ -1746,6 +1839,19 @@ class Planet2 {
       } else if (x >= 374 && x <= 404 && y >= 250 && y <= 280) {
         this.inShip = true
         this.inMap = false
+      }
+    }
+  }
+  exitLocation() {
+    if (canvas.mouseDown == true) {
+      let x = canvas.mouseX
+      let y = canvas.mouseY
+      
+      if (x >= 270 && x <= 330 && y >= 417 && y <= 443) {
+        this.inBarn = false
+        this.inShip = false
+        this.inMap = true
+        //canvas.onMap = false
       }
     }
   }
@@ -1794,7 +1900,8 @@ function animate() {
         if (fromP2 < canvas.planetRadius) {
           let x = e.clientX
           let y = e.clientY
-          if ((canvas.onMap && x >= 310 && x <= 340 && y >= 387 && y <= 410) || 
+          if (!canvas.onMap && x >= 270 && x <= 330 && y >= 417 && y <= 443) canvas.onMap = true
+          else if ((canvas.onMap && x >= 310 && x <= 340 && y >= 387 && y <= 410) || 
               (canvas.onMap && x >= 374 && x <= 404 && y >= 250 && y <= 280)) canvas.onMap = false
           else window.location.href = 'https://www.linkedin.com/in/justin-sterling-06b806232';
         }
@@ -1869,12 +1976,12 @@ function drawLogo(x,y) {
   c.strokeRect(x,y,100,100)
   drawL(x+2,y+2)
 }
-//flashlight(c1,250,550,300)
+flashlight(c1,250,550,300)
 mycanvas.addEventListener('mousemove', (event) => {
   let x = event.clientX;
   let y = event.clientY;
   let radius = 300;
-  //flashlight(c1,x,y,radius)
+  flashlight(c1,x,y,radius)
 })
 
 //drawLogo(10,300)

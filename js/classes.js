@@ -1,11 +1,12 @@
 export class Particle {
-    constructor({ c, position, color, velocity = { x: 0, y: 0 }, size}) {
+    constructor({ c, position, color, velocity = { x: 0, y: 0 }, size,alphaChange=.98}) {
         this.c = c
         this.position = position
         this.color = color
         this.velocity = velocity
         this.size = size
         this.alpha = 1
+        this.alphaChange = alphaChange
     }
 
     update() {
@@ -13,7 +14,7 @@ export class Particle {
         this.velocity.y *= .98
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
-        this.alpha *= .98
+        this.alpha *= this.alphaChange
         //c.globalAlpha = .01
     }
 
