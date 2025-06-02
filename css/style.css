@@ -745,3 +745,16 @@ canvas {
         max-width: 75%;
     }
 }
+
+@media (max-width: 768px) {
+  html {
+    overflow: scroll;
+  }
+  .zoom-in {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .zoom-in:active {
+    transform: scale(.7); /* Zooms in on tap for mobile */
+  }
+}

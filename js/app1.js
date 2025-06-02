@@ -276,14 +276,26 @@ class PlanetDesc {
     }
   }
   draw() {
+    if (this.outputWords.length > 0) {
+      c.save()
+      c.globalAlpha = .2
+      c.fillRect(this.mouseX - 175,this.mouseY-70,160,70)
+      c.globalAlpha = 1
+      c.strokeRect(this.mouseX - 175,this.mouseY-70,160,70)
+      c.restore()
+    }
     //this.drawText(this.position.x - 250,this.position.y-250,this.outputWords)
     for (let i = 0; i < this.outputWords.length; i++) {
-      this.drawText(this.position.x - 290 + this.offset.x,(this.position.y-268 + this.offset.y)+(i*20),this.outputWords[i].join(''))
+      //this.drawText(this.position.x - 290 + this.offset.x,(this.position.y-268 + this.offset.y)+(i*20),this.outputWords[i].join(''))
+      this.drawText(this.mouseX - 165,(this.mouseY-50)+(i*20),this.outputWords[i].join(''))
     }
     //c.fillStyle = 'red'
     //c.fillRect(this.position.x - 250,this.position.y-250,20,20)
   }
   update() {
+    //console.log(this.outputWords)
+    //this.position.x = canvas.mouseX - 20
+    //this.position.y = canvas.mouseY - 20
     let yCenter = this.position.y
     let xCenter = this.position.x
     let r = 200
@@ -294,6 +306,8 @@ class PlanetDesc {
     // }
     var x = canvas.mouseX
     var y = canvas.mouseY
+    this.mouseX = x
+    this.mouseY = y
     var fromC = Math.sqrt( Math.pow((y - yCenter), 2) + Math.pow((x - xCenter), 2) );
     this.active = false
     if (fromC < r*1.2) {
@@ -306,7 +320,7 @@ class PlanetDesc {
   }
 
   updateDesc() {
-    //console.log(this.active)
+    //console.log(this.description)
     if (this.active) {  
       // If at end
       if (this.currentSentence >= this.description.length) return
@@ -356,6 +370,18 @@ class PlanetDesc {
     c.fillStyle = 'rgb(138, 221, 233)'
     c.fillText(sentece,x,y)
     c.restore()
+  }
+  reset() {
+    this.currentChar = 0
+    this.currentSentence = 0
+    this.mouseX = 0
+    this.mouseY = 0
+    this.outputWords = []
+    description = this.description
+    for (let i = 0; i < description.length; i++) {
+      this.description[i] = this.splitString(description[i])
+    }
+    //this.updateDesc()
   }
 }
 class PowerUp {
@@ -1593,11 +1619,13 @@ class PlanetEnv {
   }
   update() {
     this.time += 1
-    if (canvas.mouseHeldTime >= 10 && (canvas.mouseX > 170 && canvas.mouseX < 430)) this.raining = true
+    if (canvas.mouseDown && canvas.mouseHeldTime >= 10 && (canvas.mouseX > 170 && canvas.mouseX < 430)) this.raining = true
     else this.raining = false
     if (canvas.strike) { 
       this.lightningStrike(this.burnable)
       canvas.strike = false
+      
+      this.raining = false
       this.strikeTime = 5
     }
     this.rain.update({x:canvas.mouseX-50,y:165})
@@ -1726,21 +1754,38 @@ class Planet2 {
     this.inBarn = false
     this.inShip = false
     this.r = 200
+    this.bounce = 1
+    this.bounceIncrement = 1
     this.barnEnv = new Planet2Env1({position:this.position})
     this.shipEnv = new Planet2Env2({position:this.position})
     this.planetdesc = new PlanetDesc({
       position: this.position,
+      // description: ['LinkedIn Planet',
+      //   'Click anywhere on planet to enter linkedIn',
+      //   'Otherwise click location to enter',
+      //   'Hold left mouse down for rain',
+      //   'Right click to strike lightning',
+      // ]
       description: ['LinkedIn Planet',
-        'Click anywhere on planet to enter linkedIn',
-        'Otherwise click location to enter',
-        'Hold left mouse down for rain',
-        'Right click to strike lightning',
+     'Left click: Enter area',
       ],
       offset: {
         x: 0,
         y: -4
       }
     })
+    // if (canvas.onMap) {
+    //   this.planetdesc.description = ['LinkedIn Planet',
+    //     'Left click: Enter linkedIn/location',
+    //   ]
+    //   this.planetdesc.reset()
+    // } else {
+    //   this.planetdesc.description = ['LinkedIn Planet',
+    //     'Hold left mouse: Rain',
+    //     'Right click: Lightning',
+    //   ]
+    //   this.planetdesc.reset()
+    // }
     this.barn = {
       position: {
         x: 340,
@@ -1751,6 +1796,12 @@ class Planet2 {
     }
   }
   update() {
+    //console.log(this.position.x)
+    
+    if (this.time % 10 == 0) {
+      if (this.bounce == 8 || this.bounce == 0) this.bounceIncrement *= -1
+      this.bounce += this.bounceIncrement
+    }
     this.time += 1
     if (this.time % 3 == 0) this.planetdesc.update()
     if (this.inMap) { 
@@ -1763,10 +1814,11 @@ class Planet2 {
       this.shipEnv.update()
       this.exitLocation()
     }
+    //if (this.time % 20 == 0) console.log(this.planetdesc.outputWords)
   }
   draw() {
     c.save()
-    this.planetdesc.draw()
+    
     if (this.inMap) {
       this.createMap()
     } else if (this.inBarn) {
@@ -1776,6 +1828,7 @@ class Planet2 {
       this.shipEnv.draw()
       this.createReturn()
     }
+    this.planetdesc.draw()
     c.restore()
   }
   createMap() {
@@ -1798,7 +1851,9 @@ class Planet2 {
     c.fillRect(460,187,20,34)
     c.fillRect(425,163,10,30)
     outlineCircle(this.position.x,this.position.y,this.r+6,'#111',13,1)
-      
+    
+    this.createArrow(318,355+this.bounce)  
+    
     // Barn location (x: 310-340, y: 387-410)
     c.fillStyle = 'rgb(194, 71, 71)'
     c.fillRect(310,390,30,20)
@@ -1810,6 +1865,8 @@ class Planet2 {
     c.fillRect(318,400,2,10)
     c.fillRect(329,400,2,10)
     c.fillRect(320,400,10,2)
+
+    this.createArrow(384,220+this.bounce) 
 
     // Ship location (x: 374-404, y: 250-280)
     c.fillStyle = 'rgb(182, 182, 182)'
@@ -1827,6 +1884,14 @@ class Planet2 {
     c.fillRect(379,250,20,7)
     createCircle(385,254,2,'lightblue')
     createCircle(393,254,2,'lightblue')
+  }
+  createArrow(x,y) {
+    c.fillStyle = 'rgb(245, 221, 35)'
+    c.fillRect(x,y,10,10)
+    c.fillRect(x-5,y+10,20,5)
+    c.fillRect(x-2.5,y+15,15,2)
+    c.fillRect(x,y+17,10,2)
+    c.fillRect(x+2.5,y+19,5,2)
   }
   createReturn() {
     // x: 270-330, y: 417-443
@@ -1847,9 +1912,19 @@ class Planet2 {
         this.inBarn = true
         this.inMap = false
         //canvas.onMap = false
+        this.planetdesc.description = ['LinkedIn Planet',
+        'Hold left mouse: Rain',
+        'Right click: Lightning',
+        ]
+        this.planetdesc.reset()
       } else if (x >= 374 && x <= 404 && y >= 250 && y <= 280) {
         this.inShip = true
         this.inMap = false
+        this.planetdesc.description = ['LinkedIn Planet',
+        'Hold left mouse: Rain',
+        'Right click: Lightning',
+        ]
+        this.planetdesc.reset()
       }
     }
   }
@@ -1863,6 +1938,11 @@ class Planet2 {
         this.inShip = false
         this.inMap = true
         //canvas.onMap = false
+        this.planetdesc.description = [
+          'LinkedIn Planet',
+          'Left click: Enter area',
+        ]
+        this.planetdesc.reset()
       }
     }
   }
@@ -1914,7 +1994,7 @@ function animate() {
           if (!canvas.onMap && x >= 270 && x <= 330 && y >= 417 && y <= 443) canvas.onMap = true
           else if ((canvas.onMap && x >= 310 && x <= 340 && y >= 387 && y <= 410) || 
               (canvas.onMap && x >= 374 && x <= 404 && y >= 250 && y <= 280)) canvas.onMap = false
-          else window.location.href = 'https://www.linkedin.com/in/justin-sterling-06b806232';
+          else if (canvas.onMap) window.location.href = 'https://www.linkedin.com/in/justin-sterling-06b806232';
         }
       }
       clearInterval(canvas.interval)
@@ -1923,6 +2003,7 @@ function animate() {
       
     }
     oncontextmenu = function(e){
+      canvas.mouseDown = false
       clearInterval(canvas.interval)
       canvas.interval = null;
       canvas.mouseHeldTime = 0;
