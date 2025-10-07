@@ -22,6 +22,9 @@ canvas.width = innerWidth
 canvas.height = innerHeight
 c.imageSmoothingEnabled = 'false'
 
+if (canvas.width < 600) {
+    canvas.width = 1199;
+}
 class Particle {
     constructor({ position, color, velocity = { x: 0, y: 0 }}) {
         this.position = position
@@ -132,7 +135,7 @@ class Box extends ParticleEffect { // Inherit from ParticleEffect class
         if (this.trail) super.update(); // Call ParticleEffect update method
         this.velocity.x *= this.deceleration
         this.velocity.y *= this.deceleration
-        if (this.position.x > innerWidth || this.position.y > innerHeight) {
+        if (this.position.x > canvas.width || this.position.y > canvas.height) {
             this.velocity.x = 0
             this.velocity.y = 0
         }
@@ -361,8 +364,8 @@ class StarMaker {
         if (Math.random() < 0.01) { // Chance of creating a new particle
             const star = new Star({
                 position: {
-                    x: Math.random()*innerWidth,
-                    y: Math.random()*innerHeight
+                    x: Math.random()*canvas.width,
+                    y: Math.random()*canvas.height
                 }
             })
             this.stars.push(star)
@@ -428,7 +431,7 @@ class Water {
     }
     update() {
         if (this.falling) {
-            if (this.position.y > innerHeight - 4) this.falling = false
+            if (this.position.y > canvas.height - 4) this.falling = false
             this.position.x += this.velocity.x
             this.position.y += this.velocity.y
         }
@@ -512,7 +515,7 @@ class Bucket{ // Inherit from ParticleEffect class
     
   
     update() {
-        if (this.position.x > innerWidth || this.position.y > innerHeight-this.height) {
+        if (this.position.x > canvas.width || this.position.y > canvas.height-this.height) {
             this.velocity.x = 0
             this.velocity.y = 0
         } else {
@@ -601,12 +604,16 @@ class Fire {
         } 
     }
 }
+let moonheight = null;
+if (canvas.width == 1199) {
+    moonheight = 150;
+}
 class Moon { // Inherit from ParticleEffect class
     constructor({
         position = { x: 0, y: 0 },
         color = 'white',
         width = 250,
-        height = 250,
+        height = moonheight ?? 250,
         text = 'Projects',
         fontSize = 3
     }) {
@@ -622,26 +629,34 @@ class Moon { // Inherit from ParticleEffect class
         this.maxLum = this.luminescence + 20
     }
     draw() {
-            c.save()
-            //c.strokeStyle = this.color
-            //c.globalAlpha = .3
-            //c.strokeRect(this.position.x, this.position.y, this.width, this.height)
-            c.shadowBlur = this.luminescence
-            c.shadowColor = this.color
-            createCircle(this.position.x+125,this.position.y+125,125,'lightgray',.9)
-            createCircle(this.position.x+125,this.position.y+125,110,'#aaa',.5)
-            c.globalAlpha = .7
-            c.shadowColor = '#eee'
-            c.shadowBlur = 1
-            c.strokeStyle = '#eee'
-            c.font = `bold ${this.fontSize}rem arial`
-            c.strokeText(this.text,(this.position.x + this.width/2)-93, (this.position.y+this.height/2)+15)
-            if (this.fillText) {
-                c.fillStyle = '#e9e9e9' 
-                c.fillText(this.text,(this.position.x + this.width/2)-93, (this.position.y+this.height/2)+16)
-            }
-            c.restore()
+        let moondia = null;
+        let moondia1 = null;
+        let moony = null;
+        if (canvas.width == 1199) {
+            moondia = 25;
+            moondia1 = 20;
+            moony = 20;
         }
+        c.save()
+        //c.strokeStyle = this.color
+        //c.globalAlpha = .3
+        //c.strokeRect(this.position.x, this.position.y, this.width, this.height)
+        c.shadowBlur = this.luminescence
+        c.shadowColor = this.color
+        createCircle(this.position.x+125,this.position.y+(moony ?? 125),moondia ?? 125,'lightgray',.9)
+        createCircle(this.position.x+125,this.position.y+(moony ?? 125),moondia1 ?? 110,'#aaa',.5)
+        c.globalAlpha = .7
+        c.shadowColor = '#eee'
+        c.shadowBlur = 1
+        c.strokeStyle = '#eee'
+        c.font = `bold ${this.fontSize}rem arial`
+        c.strokeText(this.text,(this.position.x + this.width/2)-93, (this.position.y+this.height/2)+15)
+        if (this.fillText) {
+            c.fillStyle = '#e9e9e9' 
+            c.fillText(this.text,(this.position.x + this.width/2)-93, (this.position.y+this.height/2)+16)
+        }
+        c.restore()
+    }
     
   
     update() {
@@ -703,7 +718,7 @@ const star = new Star({
 const telescope = new Telescope({
     position: {
         x: 200,
-        y: innerHeight - 100
+        y: canvas.height - 100
     }
 })
 const sm = new StarMaker()
@@ -787,45 +802,55 @@ const rbox = new LetterBox({
     fontSize: 4
 })
 
+let fontsize = null;
+let fontsize1 = null;
+let fontheight = null;
+let fontheight1 = null;
+if (canvas.width == 1199) {
+    fontsize = 2;
+    fontsize1 = 1.7;
+    fontheight = 170;
+    fontheight1 = 123;
+} 
 const bArrow = new LetterBox({
     position: {
         x: 90,
-        y: innerHeight - 100
+        y: canvas.height - 100
     },
     width: 60,
     height:60,
     text: '⭩ Pick me up',
-    fontSize: 1
+    fontSize: fontsize ?? 1
 })
 const tArrow = new LetterBox({
     position: {
         x: 330,
-        y: innerHeight - 145
+        y: canvas.height - 145
     },
     width: 60,
     height:60,
     text: '⭩ Click to view stars',
-    fontSize: 1
+    fontSize: fontsize ?? 1
 })
 const t1Arrow = new LetterBox({
     position: {
         x: 340,
-        y: innerHeight - 133
+        y: canvas.height - (fontheight1 ?? 133)
     },
     width: 60,
     height:60,
     text: 'Right click to return',
-    fontSize: .7
+    fontSize: fontsize1 ?? .7
 })
 const moveArrow = new LetterBox({
     position: {
         x: 90,
-        y: 200
+        y: fontheight ?? 200
     },
     width: 60,
     height:60,
     text: 'Can drag\n ⭨',
-    fontSize: 1
+    fontSize: fontsize
 })
 const bucket = new Bucket()
 
@@ -877,7 +902,7 @@ function IsThePointerInTheObject(x, y, object) {
     return false;
 }
 
-canvas.addEventListener('mousedown', (event) => {
+canvas.addEventListener('pointerdown', (event) => {
     let coordinates = getClientCoordinates(event);
     draggable.forEach((item) => {
         item.active = false;
@@ -904,7 +929,7 @@ canvas.addEventListener('mousedown', (event) => {
     }
 })
 var tips = true
-canvas.addEventListener('mousemove', (event) => {
+canvas.addEventListener('pointermove', (event) => {
     let coordinates = getClientCoordinates(event);
     
     if (isDragging) {
@@ -927,7 +952,7 @@ canvas.addEventListener('mousemove', (event) => {
 })
 
 
-canvas.addEventListener('mouseup',
+canvas.addEventListener('pointerup',
     (e) => {
         isDragging = false;
         //console.log('moving box')
@@ -956,7 +981,7 @@ const water = new Water({})
 const mm = new MeteorMaker()
 const moon = new Moon({
     position: {
-        x: innerWidth - 300,
+        x: canvas.width - 300,
         y:50
     }
 })
@@ -1015,7 +1040,7 @@ function animate() {
     }
     //star.draw()
     sm.draw()
-    //moon.draw()
+    moon.draw()
     bucket.draw()
     mm.draw()
     rbox.draw()
@@ -1033,12 +1058,12 @@ function animate() {
     //box1.update()
     //meteor1.update()
     bxs.forEach(box  => box.update())
-    //mm.update()
+    mm.update()
     //star.update()
     sm.update()
     bucket.update()
     rbox.update()
-    //moon.update()
+    moon.update()
     //fp.update()
     //fire.update()
     //water.update() 
